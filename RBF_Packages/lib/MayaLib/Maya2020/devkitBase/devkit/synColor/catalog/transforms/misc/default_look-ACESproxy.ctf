@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="ed72514c-18be-4127-9608-0278aa4b93c4" name="default look (AP)" version="1.3">
+    <Info>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+        <Release>2018.0.80</Release>
+    </Info>
+    <Description>Apply the Default Look transform specified in preferences via an ACES Proxy workflow</Description>
+    <InputDescriptor>ACES</InputDescriptor>
+    <OutputDescriptor>ACES</OutputDescriptor>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="interchange/ACESproxy/ACES_to_ACESproxy.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference alias="defaultLook" inBitDepth="16f" outBitDepth="16f">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="interchange/ACESproxy/ACESproxy_to_ACES.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+</ProcessList>

@@ -1,0 +1,44 @@
+// ===========================================================================
+// Copyright 2023 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+//  Description:	defines behaviour and layout of richSelection
+//					tool property sheet
+//
+
+
+global proc richSelectionProperties ()
+//
+//	Procedure Name:
+//		richSelectionProperties
+//
+//	Description:
+//		layout of tool property sheet
+//
+//	Input Arguments:
+//		None.
+//
+//	Return Value:
+//		None.
+//
+{
+	string	$currContext = `currentCtx`;
+	string	$currTool	 = `contextInfo -c $currContext`;
+	
+	setUITemplate -pushTemplate OptionsTemplate;
+
+	string $parent = `toolPropertyWindow -q -location`;
+    setParent $parent;
+
+	columnLayout -adj true richSelection;
+	
+		softSelectProperties(/*collapsed*/false, /*uvTool*/false);
+		reflectionProperties(/*collapsed*/false, /*uvTool*/false);
+		
+	setParent ..; // richSelection
+
+	setUITemplate -popTemplate;
+}

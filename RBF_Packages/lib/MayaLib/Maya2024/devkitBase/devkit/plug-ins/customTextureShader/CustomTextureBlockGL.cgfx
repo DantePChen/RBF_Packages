@@ -1,0 +1,67 @@
+//-
+// Copyright 2012 Autodesk, Inc.  All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license agreement
+// provided at the time of installation or download, or which otherwise
+// accompanies this software in either electronic or hard copy form.
+//+
+
+float4x4 gWVPXf : WorldViewProjection < string UIWidget = "None"; >;
+
+float colVal = 0;
+
+texture MyTexture
+<
+	string ResourceName = "";
+	string UIName = "MyTexture";
+	string ResourceType = "2D";
+	string UIWidget = "FilePicker";
+>;
+
+sampler2D SAMP_MMMLWWW = sampler_state
+{
+    Texture = <MyTexture>;
+};
+
+struct VS_INPUT
+{
+	float3 Position : POSITION;
+	float2 UVset0 : TEXCOORD0;
+};
+
+struct VS_TO_PS
+{
+    float4 HPos : POSITION;
+	float4 UVset0 : TEXCOORD0;
+};
+
+
+VS_TO_PS ShaderVertex(VS_INPUT In)
+{
+    VS_TO_PS Out;
+
+	Out.HPos = mul(float4(In.Position, 1.0f), gWVPXf);
+	Out.UVset0 = float4(In.UVset0.x, 1.0f-In.UVset0.y, 0, 0);
+
+	return Out;
+}
+
+// -------------------------------------- ShaderPixel --------------------------------------
+
+float4 ShaderPixel( VS_TO_PS In ) : COLOR0
+{
+	float4 Sampler = tex2D(SAMP_MMMLWWW, In.UVset0.xy);
+	float4 PixelColor = float4(Sampler.x, Sampler.y, Sampler.z, 1);
+	return PixelColor + float4(colVal, 0, 0, 1);
+}
+
+// -------------------------------------- technique11 Main ---------------------------------------
+technique Main
+{
+	pass P0
+	{
+        VertexProgram = compile glslv ShaderVertex();
+        FragmentProgram = compile glslf ShaderPixel();
+	}
+}
+

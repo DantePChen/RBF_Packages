@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="f1e6a67c-1c9c-4b91-80db-80bd4fd4d5dd" name="ACES 0.2 to P3-DCI" version="1.4">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>ACES Reference Rendering Transform + P3-DCI Output Device Transform</Description>
+    <Description>aces_dev version 0.2</Description>
+    <InputDescriptor>Academy Color Encoding Specification (ACES)</InputDescriptor>
+    <OutputDescriptor>P3 RGB, ACES neutrals mapped to D60 assuming projector calib. white is DCI</OutputDescriptor>
+    <ExposureContrast inBitDepth="16f" outBitDepth="16f" style="linear">
+        <DynamicParameter param="EXPOSURE" />
+        <DynamicParameter param="CONTRAST" />
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="0.1800" />
+    </ExposureContrast>
+    <Reference basePath="Autodesk" bypass="true" inBitDepth="16f" outBitDepth="16f" path="misc/default_look-ACESproxy.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/ACES_to_CIE-XYZ_v0.2.ctf" />
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 1.26674902439  0.00674529327 -0.19350160658
+-0.53557044268  1.48944914341  0.01798517630
+-0.00281646173  0.00464417087  0.91641855240
+        </Array>
+    </Matrix>
+    <Range inBitDepth="16f" outBitDepth="16f">
+        <maxInValue>1.0000000000e+00</maxInValue>
+        <maxOutValue>1.0000000000e+00</maxOutValue>
+    </Range>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 0.788064122200 -0.004088011105  0.166479825974
+ 0.283357173204  0.669960379601  0.046682506800
+ 0.000986004947 -0.003407748649  1.091479539871
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+0.881500006 0.000000000 0.000000000
+0.000000000 0.881500006 0.000000000
+0.000000000 0.000000000 0.881500006
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 2.7543330193 -1.0015562773 -0.4426126778
+-0.7925893664  1.6818799973  0.0243390854
+ 0.0379767194 -0.0820682347  1.0176395178
+        </Array>
+    </Matrix>
+    <GamutMap inBitDepth="16f" outBitDepth="16f" style="dw3" />
+    <Range inBitDepth="16f" outBitDepth="16f">
+        <minInValue>2.0833333334e-06</minInValue>
+        <maxInValue>1.0000000000e+00</maxInValue>
+        <minOutValue>0.0000000000e+00</minOutValue>
+        <maxOutValue>1.0000000000e+00</maxOutValue>
+    </Range>
+    <Gamma inBitDepth="16f" outBitDepth="12i" style="basicRev">
+        <GammaParams gamma="2.600000000000000" />
+    </Gamma>
+</ProcessList>

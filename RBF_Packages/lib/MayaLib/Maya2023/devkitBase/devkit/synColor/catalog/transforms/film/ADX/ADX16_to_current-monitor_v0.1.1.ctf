@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="14e507c6-0b43-4a80-a76d-ea811508a421" name="ADX16 to monitor" version="1.3">
+    <Info>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+        <Release>2018.0.80</Release>
+    </Info>
+    <Description>ADX16-to-ACES + RRT + current monitor ODT</Description>
+    <Description>aces_dev version 0.1.1</Description>
+    <Description>Default look applied in ACESproxy space</Description>
+    <Description>(References the current monitors set in LUT Preferences)</Description>
+    <InputDescriptor>ADX16</InputDescriptor>
+    <OutputDescriptor>normalized RGB code values</OutputDescriptor>
+    <Reference basePath="Autodesk" inBitDepth="12i" outBitDepth="16f" path="film/ADX/ADX16_to_ACES.ctf" />
+    <ExposureContrast inBitDepth="16f" outBitDepth="16f" style="linear">
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="0.1800" />
+        <DynamicParameter param="EXPOSURE" />
+        <DynamicParameter param="CONTRAST" />
+    </ExposureContrast>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="misc/default_look-ACESproxy.ctf" bypass="true">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/ACES_to_CIE-XYZ_v0.1.1.ctf" />
+    <Reference alias="currentMonitor" inBitDepth="16f" outBitDepth="10i" />
+</ProcessList>

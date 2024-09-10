@@ -1,0 +1,5 @@
+if (NOT PYTHON_CONFIG_SUFFIX)
+    message(STATUS "Shiboken2Config: Using default python: -python2.7")
+    SET(PYTHON_CONFIG_SUFFIX -python2.7)
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/Shiboken2Config${PYTHON_CONFIG_SUFFIX}.cmake")

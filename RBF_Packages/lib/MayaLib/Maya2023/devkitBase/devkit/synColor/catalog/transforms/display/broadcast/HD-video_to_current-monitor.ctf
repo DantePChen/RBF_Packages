@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="2b6864cd-3afc-4f70-9ce0-a631d9779e91" name="HD to monitor" version="1.3">
+    <Info>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+        <Release>2018.0.80</Release>
+    </Info>
+    <Description>HD video to current monitor</Description>
+    <Description>(References the current monitors set in LUT Preferences)</Description>
+    <InputDescriptor>normalized RGB code values</InputDescriptor>
+    <OutputDescriptor>normalized RGB code values</OutputDescriptor>
+    <ExposureContrast inBitDepth="12i" outBitDepth="12i" style="video">
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="0.1800" />
+        <DynamicParameter param="EXPOSURE" />
+        <DynamicParameter param="CONTRAST" />
+    </ExposureContrast>
+    <Reference basePath="Autodesk" inBitDepth="12i" outBitDepth="12i" path="misc/default_look.ctf" bypass="true">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="12i" outBitDepth="16f" path="display/broadcast/HD-video_to_CIE-XYZ.ctf" />
+    <Reference alias="currentMonitor" inBitDepth="16f" outBitDepth="10i" />
+</ProcessList>

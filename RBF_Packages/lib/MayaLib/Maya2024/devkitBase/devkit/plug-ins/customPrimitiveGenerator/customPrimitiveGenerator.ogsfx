@@ -1,0 +1,105 @@
+//**************************************************************************/
+// Copyright (c) 2012 Autodesk, Inc.
+// All rights reserved.
+// 
+// These coded instructions, statements, and computer programs contain
+// unpublished proprietary information written by Autodesk, Inc., and are
+// protected by Federal copyright law. They may not be disclosed to third
+// parties or copied or duplicated in any form, in whole or in part, without
+// the prior written consent of Autodesk, Inc.
+//**************************************************************************/
+
+// World-view-projection transformation.
+uniform mat4 gWVPXf : WorldViewProjection < string UIWidget = "None"; >;
+
+// Vertex shader input structure.
+attribute VS_INPUT
+{
+    vec3 Pos : POSITION;	//customPositionStream
+    vec3 Norm : NORMAL;	//customNormalStream
+};
+
+// Vertex shader output structure.
+attribute VS_TO_PS
+{
+    vec4 Color : COLOR0;
+};
+
+// Vertex shader output structure.
+attribute pixelOut
+{
+    vec4 colorOut : COLOR0;
+}
+
+// Vertex shader.
+GLSLShader VS_ogsfxExample
+{
+	void main()
+	{
+		gl_Position = gWVPXf*vec4(Pos, 1.0);
+    	vsOut.Color = vec4(Norm, 1.0f);
+	}
+}
+
+// Geometry shader. To display in wireframe
+GLSLShader GS_ogsfxExample
+{
+  layout(triangles) in;
+  layout(line_strip, max_vertices = 6) out;
+  void main()
+  {
+
+	gl_Position = gl_in[0].gl_Position;
+	gsOut.Color = gsIn[0].Color;
+	EmitVertex();
+	
+	gl_Position = gl_in[1].gl_Position;
+	gsOut.Color = gsIn[1].Color;
+	EmitVertex();
+	
+	EndPrimitive();
+	
+	gl_Position = gl_in[1].gl_Position;
+	gsOut.Color = gsIn[1].Color;
+	EmitVertex();
+	
+	gl_Position = gl_in[2].gl_Position;
+	gsOut.Color = gsIn[2].Color;
+	EmitVertex();
+	
+	EndPrimitive();
+	
+	gl_Position = gl_in[2].gl_Position;
+	gsOut.Color = gsIn[2].Color;
+	EmitVertex();
+	
+	gl_Position = gl_in[0].gl_Position;
+	gsOut.Color = gsIn[0].Color;
+	EmitVertex();
+	
+	EndPrimitive();
+  }
+}
+
+GLSLShader PS_ogsfxExample
+{
+	void main()
+	{
+    	colorOut = psIn.Color;
+	}
+}
+
+// The main technique.
+technique Main
+<
+	string index_buffer_type = "customPrimitiveTest";
+	string customSemantics = "POSITION=customPositionStream NORMAL=customNormalStream";
+>
+{
+    pass P0
+    {
+        VertexShader (in VS_INPUT, out VS_TO_PS vsOut) = VS_ogsfxExample;
+		GeometryShader ( in VS_TO_PS gsIn, out VS_TO_PS gsOut) = GS_ogsfxExample;
+        PixelShader (in VS_TO_PS psIn, out pixelOut) = PS_ogsfxExample;
+    }
+}

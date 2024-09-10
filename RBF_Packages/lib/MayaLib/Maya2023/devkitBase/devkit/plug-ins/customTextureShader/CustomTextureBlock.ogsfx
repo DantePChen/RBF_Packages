@@ -1,0 +1,72 @@
+//-
+// Copyright 2012 Autodesk, Inc.  All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license agreement
+// provided at the time of installation or download, or which otherwise
+// accompanies this software in either electronic or hard copy form.
+//+
+
+uniform mat4 gWVPXf : WorldViewProjection < string UIWidget = "None"; >;
+
+uniform float colVal = 0;
+
+uniform texture2D MyTexture
+<
+	string ResourceName = "";
+	string UIName = "MyTexture";
+	string ResourceType = "2D";
+	string UIWidget = "FilePicker";
+>;
+
+uniform sampler2D SAMP_MMMLWWW = sampler_state
+{
+    Texture = <MyTexture>;
+};
+
+attribute VS_INPUT
+{
+	vec3 Position : POSITION;
+	vec2 UVset0 : TEXCOORD0;
+};
+
+attribute VS_TO_PS
+{
+	vec4 UVset0 : TEXCOORD0;
+};
+
+
+GLSLShader ShaderVertex
+{
+	void main()
+	{
+		vsOUT.UVset0 = vec4(UVset0.x, 1.0f-UVset0.y, 0, 0);
+		gl_Position = gWVPXf*vec4(Position, 1.0);
+	}
+}
+
+// -------------------------------------- ShaderPixel --------------------------------------
+attribute pixelOut
+{
+	vec4 colorOut : COLOR0;
+};
+
+GLSLShader ShaderPixel
+{
+	void main()
+	{
+		vec4 Sampler = texture2D(SAMP_MMMLWWW, psIN.UVset0.xy);
+		vec4 PixelColor = vec4(Sampler.x, Sampler.y, Sampler.z, 1);
+		colorOut = PixelColor + vec4(colVal, 0, 0, 1);
+	}
+}
+
+// -------------------------------------- technique11 Main ---------------------------------------
+technique Main
+{
+	pass P0
+	{
+        VertexShader (in VS_INPUT, out VS_TO_PS vsOUT) = ShaderVertex;
+        PixelShader (in VS_TO_PS psIN, out pixelOut) = ShaderPixel;
+	}
+}
+

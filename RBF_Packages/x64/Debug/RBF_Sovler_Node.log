@@ -1,0 +1,7 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  main.cpp
+  RBF_Solver_Compute.cpp
+  RBF_Solver_Node.cpp
+     Creating library ..\..\Plugin_Test\RBF_Sovler_Node.lib and object ..\..\Plugin_Test\RBF_Sovler_Node.exp
+  RBF_Sovler_Node.vcxproj -> F:\code study\CPP\RBF_Sovler_Node\..\..\Plugin_Test\RBF_Sovler_Node.mll
+  已复制         1 个文件。

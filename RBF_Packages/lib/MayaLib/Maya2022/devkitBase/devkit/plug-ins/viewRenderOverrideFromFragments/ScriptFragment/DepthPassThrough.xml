@@ -1,0 +1,30 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="DepthPassThrough" name="DepthPassThrough" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="0" >
+    <description>
+<![CDATA[
+Pass the depth target input through.  Useful for sharing and renaming inputs.]]>
+</description>
+    <properties>
+        <target  name="depth" />
+    </properties>
+    <values>
+    </values>
+    <outputs>
+        <target  name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <SetParameter name="@output" value="@depth" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

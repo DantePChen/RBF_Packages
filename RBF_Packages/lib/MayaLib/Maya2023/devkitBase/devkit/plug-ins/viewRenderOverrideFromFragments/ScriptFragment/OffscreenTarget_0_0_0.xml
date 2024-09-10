@@ -1,0 +1,31 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="ReflectionTarget" name="OffscreenTarget_0_0_0" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Create and return a new temporary offscreen target with the same format as finalDesc.]]>
+</description>
+    <properties>
+        <target  name="finalDesc" />
+    </properties>
+    <values>
+    </values>
+    <outputs>
+        <target  name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <AcquireTarget name="localOffscreen" format="@finalDesc.format" size="@finalDesc.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <SetParameter name="@output" value="localOffscreen" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

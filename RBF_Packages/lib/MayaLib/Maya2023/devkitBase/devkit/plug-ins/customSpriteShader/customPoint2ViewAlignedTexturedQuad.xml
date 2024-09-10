@@ -1,0 +1,198 @@
+<!--
+===========================================================================
+Copyright 2016 Autodesk, Inc. All rights reserved.
+
+Use of this software is subject to the terms of the Autodesk license
+agreement provided at the time of installation or download, or which
+otherwise accompanies this software in either electronic or hard copy form.
+===========================================================================
+-->
+<fragment  uiName="customPoint2ViewAlignedTexturedQuad" name="customPoint2ViewAlignedTexturedQuad" type="geometryShader" class="ShadeFragment" version="1.0" feature_level="40" >
+    <description>
+<![CDATA[
+Expand a point to a view-aligned quad]]>
+</description>
+    <keyword value="geometryShader" />
+    <properties>
+        <float3  name="Pw" semantic="Pw" flags="isRequirementOnly" />
+        <float3  name="Nw" semantic="Nw" flags="isRequirementOnly" />
+        <float3  name="Vw" semantic="Vw" flags="isRequirementOnly" />
+        <float4  name="sprite" semantic="sprite" flags="isRequirementOnly,varyingInputParam" />
+        <undefined  name="GPUStage" semantic="GPUStage" />
+        <struct  name="inputs" size="1" struct_name="geometryInS" />
+        <float4x4  name="projection" semantic="projection" />
+        <float4x4  name="projectioninverse" semantic="projectioninverse" />
+        <float4x4  name="viewprojectioninverse" semantic="viewprojectioninverse" />
+        <float3  name="cameraPosition" semantic="worldcameraposition" />
+        <float2  name="quadPositionUV" semantic="quadPositionUVType5" size="4" />
+    </properties>
+    <values>
+    </values>
+    <outputs>
+        <triStream  name="outStream" size="4" struct_name="geometryInS" isInOutParam="true"  />
+        <undefined  name="GPUStage" semantic="geometryShader" />
+    </outputs>
+    <implementation  >
+    <implementation  render="OGSRenderer" language="HLSL" lang_version="11.000000" >
+        <function_name val="point2ViewAlignedQuad" />
+        <source>
+            <![CDATA[
+void point2ViewAlignedQuad( geometryInS inputs[1], 
+    float4x4 projection, 
+    float4x4 projectionInverse, 
+    float4x4 viewProjInverse, 
+    float3 cameraPosition, 
+    float2 quadPosition[4], 
+    inout TriangleStream<geometryInS> outStream ) 
+{ 
+    geometryInS outS = inputs[0]; 
+    float2 spriteScale = outS.sprite.xy; 
+    float  spriteTwist = radians( -outS.sprite.z ); 
+ 
+    float3 Cz = normalize( mul( outS.Pc, projectionInverse ).xyz ); 
+    float3 Cy = float3( 0.0f, 1.0f, 0.0f ); 
+    float3 Cx = normalize( cross( Cz, Cy ) ); 
+           Cy = normalize( cross( Cx, Cz ) ); 
+ 
+    // Rotate around Cz axis with specified twisting angle. 
+    float sinTheta = sin( spriteTwist * 0.5f ); 
+    float cosTheta = cos( spriteTwist * 0.5f ); 
+    float4 q = float4( Cz * sinTheta, cosTheta ); 
+    float4x4 qq = float4x4( q.x * q, q.y * q, q.z * q, q.w * q ); 
+    float4x4 rot = float4x4( 
+        1-2*(qq._22+qq._33), 2*(qq._12+qq._34), 2*(qq._13-qq._24), 0, 
+        2*(qq._12-qq._34), 1-2*(qq._11+qq._33), 2*(qq._23+qq._14), 0, 
+        2*(qq._13+qq._24), 2*(qq._23-qq._14), 1-2*(qq._11+qq._22), 0, 
+        0, 0, 0, 1 ); 
+ 
+    float4x4 tm = mul( rot, projection ); 
+    float4 Cxc = mul( float4( Cx, 0.0f ), tm ); 
+    float4 Cyc = mul( float4( Cy, 0.0f ), tm ); 
+ 
+    outS.Nw = outS.Vw; 
+ 
+    float2 halfPixel = float2( 0.5f, 0.5f ); 
+ 
+    [unroll] for( int i = 0; i < 4; ++i ) 
+    { 
+        float2 scale = spriteScale * quadPosition[i]; 
+        outS.Pc = inputs[0].Pc + Cxc * scale.x + Cyc * scale.y; 
+        outS.Pw = mul( outS.Pc, viewProjInverse ); 
+        outS.Vw = cameraPosition - mul( outS.Pc, viewProjInverse ).xyz; 
+        outS.uvCoord = quadPosition[i] + halfPixel; 
+        outStream.Append( outS ); 
+    } 
+    outStream.RestartStrip(); 
+} 
+            ]]>
+        </source>
+    </implementation>
+    <implementation  render="OGSRenderer" language="Cg" lang_version="2.100000" >
+        <function_name val="point2ViewAlignedQuad" />
+        <source>
+            <![CDATA[
+void point2ViewAlignedQuad( AttribArray<geometryInS> inputs, 
+    float4x4 projection, 
+    float4x4 projectionInverse, 
+    float4x4 viewProjInverse, 
+    float3 cameraPosition, 
+    float2 quadPosition[4]) 
+{ 
+    geometryInS outS = inputs[0]; 
+    float2 spriteScale = outS.sprite.xy; 
+    float  spriteTwist = radians( -outS.sprite.z ); 
+ 
+    float3 Cz = normalize( mul( projectionInverse, outS.Pc ).xyz ); 
+    float3 Cy = float3( 0.0f, 1.0f, 0.0f ); 
+    float3 Cx = normalize( cross( Cz, Cy ) ); 
+           Cy = normalize( cross( Cx, Cz ) ); 
+ 
+    // Rotate around Cz axis with specified twisting angle. 
+    float sinTheta = sin( spriteTwist * 0.5f ); 
+    float cosTheta = cos( spriteTwist * 0.5f ); 
+    float4 q = float4( Cz * sinTheta, cosTheta ); 
+    float4x4 qq = float4x4( q.x * q, q.y * q, q.z * q, q.w * q ); 
+    float4x4 rot = float4x4( 
+        1-2*(qq._22+qq._33), 2*(qq._12-qq._34), 2*(qq._13+qq._24), 0, 
+        2*(qq._12+qq._34), 1-2*(qq._11+qq._33), 2*(qq._23-qq._14), 0, 
+        2*(qq._13-qq._24), 2*(qq._23+qq._14), 1-2*(qq._11+qq._22), 0, 
+        0, 0, 0, 1 ); 
+ 
+    float4x4 tm = mul( projection, rot ); 
+    float4 Cxc = mul( tm, float4( Cx, 0.0f ) ); 
+    float4 Cyc = mul( tm, float4( Cy, 0.0f ) ); 
+ 
+    outS.Nw = outS.Vw; 
+ 
+    float2 halfPixel = float2( 0.5f, 0.5f ); 
+ 
+    for( int i = 0; i < 4; ++i ) 
+    { 
+        float2 scale = spriteScale * quadPosition[i]; 
+        outS.Pc = inputs[0].Pc + Cxc * scale.x + Cyc * scale.y; 
+        outS.Pw = (mul( viewProjInverse, outS.Pc )).xyz; 
+        outS.Vw = cameraPosition - mul( viewProjInverse, outS.Pc ).xyz; 
+        outS.uvCoord = quadPosition[i] + halfPixel; 
+        emitVertex( outS ); 
+    } 
+    restartStrip(); 
+} 
+            ]]>
+        </source>
+    </implementation>
+    <implementation  render="OGSRenderer" language="GLSL" lang_version="3.000000" >
+        <function_name val="point2ViewAlignedQuad" />
+        <source>
+            <![CDATA[
+void point2ViewAlignedQuad(  
+    mat4x4 projection, 
+    mat4x4 projectionInverse, 
+    mat4x4 viewProjInverse, 
+    vec3 cameraPosition, 
+    vec2 quadPosition[4]) 
+{ 
+    GEO_OUT_struct outS = copyFromGEO_IN(0); 
+    vec2 spriteScale = outS.sprite.xy; 
+    float  spriteTwist = radians( -outS.sprite.z ); 
+ 
+    vec3 Cz = normalize( mul( projectionInverse, outS.Pc ).xyz ); 
+    vec3 Cy = vec3( 0.0f, 1.0f, 0.0f ); 
+    vec3 Cx = normalize( cross( Cz, Cy ) ); 
+           Cy = normalize( cross( Cx, Cz ) ); 
+ 
+    // Rotate around Cz axis with specified twisting angle. 
+    float sinTheta, cosTheta; 
+    sinTheta = sin( spriteTwist * 0.5f ); 
+    cosTheta = cos( spriteTwist * 0.5f ); 
+    vec4 q = vec4( Cz * sinTheta, cosTheta ); 
+    mat4x4 qq = mat4x4( q.x * q, q.y * q, q.z * q, q.w * q ); 
+    mat4x4 rot = mat4x4( 
+        1-2*(qq[1][1]+qq[2][2]), 2*(qq[0][1]-qq[2][3]), 2*(qq[0][2]+qq[1][3]), 0, 
+        2*(qq[0][1]+qq[2][3]), 1-2*(qq[0][0]+qq[2][2]), 2*(qq[1][2]-qq[0][3]), 0, 
+        2*(qq[0][2]-qq[1][3]), 2*(qq[1][2]+qq[0][3]), 1-2*(qq[0][0]+qq[1][1]), 0, 
+        0, 0, 0, 1 ); 
+ 
+    mat4x4 tm = projection * transpose(rot); 
+    vec4 Cxc = mul( tm, vec4( Cx, 0.0f ) ); 
+    vec4 Cyc = mul( tm, vec4( Cy, 0.0f ) ); 
+ 
+    outS.Nw = outS.Vw; 
+ 
+    vec2 halfPixel = vec2( 0.5f, 0.5f ); 
+ 
+    for( int i = 0; i < 4; ++i ) 
+    { 
+        vec2 scale = spriteScale * quadPosition[i]; 
+        outS.Pc = gl_in[0].gl_Position + Cxc * scale.x + Cyc * scale.y; 
+        outS.Pw = (mul( viewProjInverse, outS.Pc )).xyz; 
+        outS.Vw = cameraPosition - mul( viewProjInverse, outS.Pc ).xyz; 
+        outS.uvCoord = quadPosition[i] + halfPixel; 
+        EmitGeoStruct( outS ); 
+    } 
+    EndPrimitive(); 
+} 
+            ]]>
+        </source>
+    </implementation>
+    </implementation>
+</fragment>

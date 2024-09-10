@@ -1,0 +1,29 @@
+// ===========================================================================
+// Copyright 2021 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+//
+// Create custom sprite shader.
+//
+loadPlugin customSpriteShader;
+shadingNode -asShader customSpriteShader;
+sets -renderable true -noSurfaceShader true -empty -name customSpriteShader1SG;
+connectAttr -f customSpriteShader1.outColor customSpriteShader1SG.surfaceShader;
+
+//
+// Create particle sprites with random scale and twist.
+//
+particle -ll -12 0 -12 -ur 12 0 12 -grs 1 -c 1 ;
+setAttr particleShape1.particleRenderType 5;
+addAttr -ln spriteScaleXPP -dt doubleArray particleShape1;
+addAttr -ln spriteScaleYPP -dt doubleArray particleShape1;
+addAttr -ln spriteTwistPP -dt doubleArray particleShape1;
+dynExpression -s "float $randomScale = rand(0.0, 1.0);\nfloat $randomTwist = rand(-180.0, 180.0);\n\nparticleShape1.spriteScaleXPP = $randomScale;\nparticleShape1.spriteScaleYPP = $randomScale;\nparticleShape1.spriteTwistPP = $randomTwist;" -c particleShape1;
+
+//
+// Assign custom sprite shader to particle sprites.
+//
+hyperShade -assign customSpriteShader1SG;

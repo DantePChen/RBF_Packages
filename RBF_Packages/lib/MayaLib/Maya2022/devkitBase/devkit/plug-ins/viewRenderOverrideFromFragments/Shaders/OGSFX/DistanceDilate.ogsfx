@@ -1,0 +1,177 @@
+// ===========================================================================
+// Copyright 2016 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+
+// DESCRIPTION: Distance dilate effect.
+//**************************************************************************/
+
+// World-view-projection transformation.
+uniform mat4 gWVPXf : WorldViewProjection;
+
+// Screen size, in pixels.
+uniform vec2 gScreenSize : ViewportPixelSize;
+// insert in GLSL_shader itself
+// vec2 gTexelSize = 1.0 / gScreenSize;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Screen Quad Vertex Shader
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Vertex shader input structure.
+attribute VS_INPUT_ScreenQuad
+{
+    vec3 Pos : POSITION;
+    vec2 UV :  TEXCOORD0;
+}
+
+// Vertex shader output structure.
+attribute pixelOut
+{
+    vec4 colorOut: COLOR0;
+}
+
+attribute VS_TO_PS_ScreenQuad
+{
+    vec2 VSUV : TEXCOORD0;
+}
+
+// Vertex shader.
+GLSLShader VS_ScreenQuad
+{
+    void main()
+    {
+        // Output the position and texture coordinates directly.
+        gl_Position = gWVPXf*vec4(Pos, 1.0);
+        VSUV = UV;
+    }
+}
+
+// The dilate amount (number of samples in each direction, or the "radius" of the filter).  Use this
+// to determine the number of samples per pixel, including the center sample.
+uniform int gAmount = 1;
+
+// The source buffer and sampler.
+uniform texture2D gSourceTex;
+uniform sampler2D gSourceSamp = sampler_state
+{
+    texture = <gSourceTex>;
+};
+
+// Pixel shader.
+// NOTE: This expects screen quad vertex shader output.
+GLSLShader PS_DilateHoriz
+{
+    void main()
+    {
+        // Return immediately if the center sample does not have the maximum depth.  Dilation will only
+        // happen where the depth is 1.0.
+        vec4 current = vec4(0.0, 0.0, 0.0, 0.0);
+        current.r = texture2DLod(gSourceSamp, VSUV, 0.0).r;
+        if (current.r != 1.0)
+        {
+            colorOut=current;
+        }
+
+        // Compute the per-sample offset, based on the texel size and dilate direction.  Then compute
+        // the location of the starting sample, using the number of taps.
+        vec2 offset = vec2( 1.0 / gScreenSize.x, 0.0 );
+        int gNumSamples = gAmount * 2 + 1;
+        vec2 oUV = VSUV - offset * float(gNumSamples - 1) * 0.5;
+
+        // Sum each of the samples (box filter).
+        float sum = 0.0;
+        int count = 0;
+        for (int i = 0; i < gNumSamples; i++)
+        {
+            // Add the value from the source texture if it does not have the maximum depth; 1.0 depth
+            // values are completely ignored.  That is what makes this a dilation filter.
+            float value = texture2DLod(gSourceSamp, oUV, 0.0).r;
+            if (value != 1.0)
+            {
+                sum += value;
+                count++;
+            }
+
+            // Increment the texture coordinates by the offset.
+            oUV += offset;
+        }
+
+        // Return the sum divided by count, if any.
+        if (count == 0)
+            current.r = 1.0;
+        else
+            current.r = sum / float(count);
+
+        colorOut = current;
+    }
+}
+
+// Same as above, just direction is vertical. No way to pass in this direction, so code is duplicated.
+GLSLShader PS_DilateVert
+{
+    void main()
+    {
+        // Return immediately if the center sample does not have the maximum depth.  Dilation will only
+        // happen where the depth is 1.0.
+        vec4 current = vec4(0.0, 0.0, 0.0, 0.0);
+        // was texture2DLod, but that wasn't compiling.
+        current.r = texture2D(gSourceSamp, VSUV).r;
+        if (current.r != 1.0)
+            colorOut = current;
+
+        // Compute the per-sample offset, based on the texel size and dilate direction.  Then compute
+        // the location of the starting sample, using the number of taps.
+        vec2 offset = vec2( 0.0, 1.0 / gScreenSize.y );
+        int gNumSamples = gAmount * 2 + 1;
+        vec2 oUV = VSUV - offset * float(gNumSamples - 1) * 0.5;
+
+        // Sum each of the samples (box filter).
+        float sum = 0.0;
+        int count = 0;
+        for (int i = 0; i < gNumSamples; i++)
+        {
+            // Add the value from the source texture if it does not have the maximum depth; 1.0 depth
+            // values are completely ignored.  That is what makes this a dilation filter.
+            float value = texture2D(gSourceSamp, oUV).r;
+            if (value != 1.0)
+            {
+                sum += value;
+                count++;
+            }
+
+            // Increment the texture coordinates by the offset.
+            oUV += offset;
+        }
+
+        // Return the sum divided by count, if any.
+        if (count == 0)
+            current.r = 1.0;
+        else
+            current.r = sum / float(count);
+        colorOut = current;
+    }
+}
+
+// Horizontal dilate technique.
+technique DilateHoriz
+{
+    pass p0
+    {
+        VertexShader (in VS_INPUT_ScreenQuad, out VS_TO_PS_ScreenQuad) = VS_ScreenQuad;
+        PixelShader (in VS_TO_PS_ScreenQuad, out pixelOut) = PS_DilateHoriz;
+    }
+}
+
+// Vertical dilate technique.
+technique DilateVert
+{
+    pass p0
+    {
+        VertexShader (in VS_INPUT_ScreenQuad, out VS_TO_PS_ScreenQuad) = VS_ScreenQuad;
+        PixelShader (in VS_TO_PS_ScreenQuad, out pixelOut) = PS_DilateVert;
+    }
+}

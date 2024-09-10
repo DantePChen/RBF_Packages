@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="104826b3-7985-4833-acce-5334c8731b12" name="ACES RRT v0.1" version="1.3">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>ACES Reference Rendering Transform + current monitor Output Device Transform</Description>
+    <Description>aces_dev version 0.1.1</Description>
+    <Description>(References the current monitors set in LUT Preferences)</Description>
+    <InputDescriptor>Academy Color Encoding Specification (ACES)</InputDescriptor>
+    <OutputDescriptor>normalized RGB code values</OutputDescriptor>
+    <ExposureContrast inBitDepth="16f" outBitDepth="16f" style="linear">
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="1.00" />
+        <DynamicParameter param="EXPOSURE" />
+    </ExposureContrast>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="misc/default_look-ACESproxy.ctf" bypass="true">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/ACES_to_CIE-XYZ_v0.1.1.ctf" />
+    <Reference alias="currentMonitor" inBitDepth="16f" outBitDepth="16f" />
+    <ExposureContrast inBitDepth="16f" outBitDepth="16f" style="linear">
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="1.00" />
+        <DynamicParameter param="CONTRAST" />
+    </ExposureContrast>
+</ProcessList>

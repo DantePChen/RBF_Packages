@@ -1,0 +1,187 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="mayaUIPassScript" name="mayaUIPassScript" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="0" >
+    <description>
+<![CDATA[
+Render UI elements]]>
+</description>
+    <properties>
+        <world  name="opaqueUIList" />
+        <world  name="transparentBitmapsList" />
+        <world  name="transparentUIList" />
+        <world  name="xrayUIList" />
+        <camera  name="camera" />
+        <target  name="final" />
+        <target  name="finalDesc" />
+        <target  name="depth" />
+        <float4  name="viewport" />
+        <string  name="drawAgents" />
+        <bool  name="isPreUI" />
+        <bool  name="enableLineAA" />
+        <bool  name="drawUI" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<string name="drawAgents" value="RealizeBoxAgent,SwapAgent,DrawAgent"  />
+<bool name="isPreUI" value="true"  />
+<bool name="enableLineAA" value="false"  />
+<bool name="drawUI" value="true"  />
+    </values>
+    <outputs>
+        <target  name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <If value="@drawAgents" />
+            <SetRenderer name="ScriptPipeRenderer" config="@drawAgents" />
+            <Else />
+            <SetRenderer name="ScriptPipeRenderer" config="::StdDrawAgents" />
+            <EndIf />
+            <SetRenderParameter renderer="ScriptPipeRenderer" name="UseStyleGraph" value="true" />
+            <SetRenderParameter renderer="ScriptPipeRenderer" name="EnableComputeMissingChannel" value="false" />
+            <SetCamera value="@camera" />
+            <SetViewport value="@viewport" />
+            <SetTarget index="0" value="@final" />
+            <If value="@drawUI" />
+            <Declare name="listEmpty" type="bool" />
+            <Call name="isListEmpty" arg0="@opaqueUIList" arg1="listEmpty" />
+            <IfNot value="listEmpty" />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="TRUE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="TRUE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="TRUE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="opaqueUIList" arg1="TRUE" />
+            <If value="@enableLineAA" />
+            <Declare name="AAUIState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="AAUIState" parameter="DepthEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="AAUIState" parameter="DepthWriteEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="AAUIState" parameter="CullMode" value="ECullNone" />
+            <SetStateCommand commandName="SetStateParameter" name="AAUIState" parameter="SetBlendEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="AAUIState" parameter="BlendMultOver" />
+            <SetStateCommand commandName="SetStateParameter" name="AAUIState" parameter="AntialiasedLineEnable" value="true" />
+            <SetStateCommand commandName="CommitNewState" name="AAUIState" />
+            <Else />
+            <Declare name="noAAUIState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="noAAUIState" parameter="DepthEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="noAAUIState" parameter="DepthWriteEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="noAAUIState" parameter="CullMode" value="ECullNone" />
+            <SetStateCommand commandName="SetStateParameter" name="noAAUIState" parameter="SetBlendEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="noAAUIState" parameter="BlendMultOver" />
+            <SetStateCommand commandName="SetStateParameter" name="noAAUIState" parameter="AntialiasedLineEnable" value="false" />
+            <SetStateCommand commandName="CommitNewState" name="noAAUIState" />
+            <EndIf />
+            <Render name="@opaqueUIList" />
+            <If value="@enableLineAA" />
+            <SetStateCommand commandName="RestorePreviousState" name="AAUIState" />
+            <Else />
+            <SetStateCommand commandName="RestorePreviousState" name="noAAUIState" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="opaqueUIList" arg1="FALSE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="FALSE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="isListEmpty" arg0="@transparentBitmapsList" arg1="listEmpty" />
+            <IfNot value="listEmpty" />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="TRUE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="TRUE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="TRUE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="transparentBitmapsList" arg1="TRUE" />
+            <Declare name="transparentBitmapsState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="transparentBitmapsState" parameter="DepthEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="transparentBitmapsState" parameter="ZLessNoW" />
+            <SetStateCommand commandName="SetStateParameter" name="transparentBitmapsState" parameter="SetBlendEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="transparentBitmapsState" parameter="BlendMultOver" />
+            <SetStateCommand commandName="SetStateParameter" name="transparentBitmapsState" parameter="AlphaTestEnabled" value="false" />
+            <SetStateCommand commandName="CommitNewState" name="transparentBitmapsState" />
+            <Declare name="localState2D" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="localState2D" parameter="CullMode" value="ECullNone" />
+            <SetStateCommand commandName="SetStateParameter" name="localState2D" parameter="DepthEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="localState2D" parameter="DepthWriteEnable" value="true" />
+            <SetStateCommand commandName="CommitNewState" name="localState2D" />
+            <Render name="@transparentBitmapsList" />
+            <SetStateCommand commandName="RestorePreviousState" name="localState2D" />
+            <SetStateCommand commandName="RestorePreviousState" name="transparentBitmapsState" />
+            <Call name="SetPassSemantic" arg0="transparentBitmapsList" arg1="FALSE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="FALSE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="isListEmpty" arg0="@transparentUIList" arg1="listEmpty" />
+            <IfNot value="listEmpty" />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="TRUE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="TRUE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="TRUE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="transparentUIList" arg1="TRUE" />
+            <Declare name="transpUIState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="transpUIState" parameter="DepthEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="transpUIState" parameter="ZLessNoW" />
+            <SetStateCommand commandName="SetStateParameter" name="transpUIState" parameter="SetBlendEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="transpUIState" parameter="BlendMultOver" />
+            <SetStateCommand commandName="SetStateParameter" name="transpUIState" parameter="AlphaTestEnabled" value="false" />
+            <SetStateCommand commandName="CommitNewState" name="transpUIState" />
+            <Call name="SetPassSemantic" arg0="cullFront" arg1="TRUE" />
+            <Declare name="localState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="CullMode" value="ECullFront" />
+            <SetStateCommand commandName="CommitNewState" name="localState" />
+            <Render name="@transparentUIList" />
+            <SetStateCommand commandName="RestorePreviousState" name="localState" />
+            <Call name="SetPassSemantic" arg0="cullFront" arg1="FALSE" />
+            <Call name="SetPassSemantic" arg0="cullBack" arg1="TRUE" />
+            <Declare name="localState2" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="localState2" parameter="CullMode" value="ECullBack" />
+            <SetStateCommand commandName="CommitNewState" name="localState2" />
+            <Render name="@transparentUIList" />
+            <SetStateCommand commandName="RestorePreviousState" name="localState2" />
+            <Call name="SetPassSemantic" arg0="cullBack" arg1="FALSE" />
+            <SetStateCommand commandName="RestorePreviousState" name="transpUIState" />
+            <Call name="SetPassSemantic" arg0="transparentUIList" arg1="FALSE" />
+            <If value="@isPreUI" />
+            <Call name="SetPassSemantic" arg0="preUIGeometry" arg1="FALSE" />
+            <Else />
+            <Call name="SetPassSemantic" arg0="postUIGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="SetPassSemantic" arg0="uiGeometry" arg1="FALSE" />
+            <EndIf />
+            <Call name="isListEmpty" arg0="@xrayUIList" arg1="listEmpty" />
+            <IfNot value="listEmpty" />
+            <Call name="SetPassSemantic" arg0="xrayUIList" arg1="TRUE" />
+            <Declare name="uiNoDepthState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="uiNoDepthState" parameter="DepthEnable" value="false" />
+            <SetStateCommand commandName="SetStateParameter" name="uiNoDepthState" parameter="DepthWriteEnable" value="true" />
+            <SetStateCommand commandName="SetStateParameter" name="uiNoDepthState" parameter="SetBlendEnable" value="true" />
+            <SetStateCommand commandName="SetRenderState" name="uiNoDepthState" parameter="BlendMultOver" />
+            <SetStateCommand commandName="CommitNewState" name="uiNoDepthState" />
+            <Render name="@xrayUIList" />
+            <SetStateCommand commandName="RestorePreviousState" name="uiNoDepthState" />
+            <Call name="SetPassSemantic" arg0="xrayUIList" arg1="FALSE" />
+            <EndIf />
+            <EndIf />
+            <SetEffect name="" />
+            <SetParameter name="@output" value="@final" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

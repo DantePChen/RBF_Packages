@@ -1,0 +1,31 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="DistanceTarget" name="DistanceTarget" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Create and return a new temporary offscreen target with format EFORMAT_R32_FLOAT]]>
+</description>
+    <properties>
+        <target  name="finalDesc" />
+    </properties>
+    <values>
+    </values>
+    <outputs>
+        <target  name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <AcquireTarget name="localOffscreen" format="EFORMAT_R32_FLOAT" size="@finalDesc.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <SetParameter name="@output" value="localOffscreen" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

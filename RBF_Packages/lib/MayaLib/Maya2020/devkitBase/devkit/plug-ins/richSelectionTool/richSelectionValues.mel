@@ -1,0 +1,29 @@
+// ===========================================================================
+// Copyright 2019 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+//	Description:	initializes richSelection tool property sheet values
+//
+//	Input Arguments:
+//		toolName  - this is the name of the instance of the tool
+//					that the property sheet is modifying.
+//
+//	Return Value:
+//		None.
+//
+
+
+global proc richSelectionValues(string $toolName) 
+{
+	string $parent = 
+		(`toolPropertyWindow -q -location` + "|richSelection");
+	setParent $parent;
+
+	softSelectValues( $parent );
+	reflectionValues( );
+
+	toolPropertySelect richSelection;
+}

@@ -1,0 +1,82 @@
+// ===========================================================================
+// Copyright 2016 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+
+// DESCRIPTION: Distance map effect.
+//**************************************************************************/
+
+// World transformation.
+uniform mat4 gWXf : World;
+
+// World-view-projection transformation.
+uniform mat4 gWVPXf : WorldViewProjection;
+
+// The plane from which distances are computed.
+uniform vec4 gPlane = {0.0, 0.0, 1.0, 0.0};
+
+// The range of distances used for normalizing the map values.
+uniform vec2 gRange = {0.0, 1.0};
+
+// Vertex shader input structure.
+attribute VS_INPUT
+{
+    vec3 Pos : POSITION;
+}
+
+// Vertex shader output structure.
+attribute VS_TO_PS
+{
+    // Vertex position in world space.
+    float Distance : TEXCOORD0;
+}
+
+attribute pixelOut {
+    vec4 colorOut:COLOR0;
+}
+
+// Vertex shader.
+GLSLShader VS_DistanceMap
+{
+    void main()
+    {
+        // Define position in model space.
+        vec4 HPm = vec4(Pos, 1.0);
+
+        // Transform the vertex from object space to clip space.
+        gl_Position = gWVPXf*HPm;
+
+        // Transform the vertex from object space to world space, and compute the absolute distance from
+        // the plane with a dot product.
+        vec4 HPw = gWXf * HPm;
+        Distance = dot(gPlane, HPw);
+    }
+}
+
+// Pixel shader.
+GLSLShader PS_DistanceMap
+{
+    void main()
+    {
+
+	// Normalize the input distance in the distance range.
+        float distance = saturate((abs(Distance) - gRange.x) / (gRange.y - gRange.x));
+
+        // Use the (monochrome) distance as the output color.
+        // TODO: I doubt all four channels need to be set - is that legal?
+        colorOut = vec4(distance, distance, distance, 1.0);
+    }
+}
+
+// The main technique.
+technique Main
+{
+    pass p0
+    {
+        VertexShader (in VS_INPUT, out VS_TO_PS) = VS_DistanceMap;
+        PixelShader (in VS_TO_PS, out pixelOut) = PS_DistanceMap;
+    }
+}

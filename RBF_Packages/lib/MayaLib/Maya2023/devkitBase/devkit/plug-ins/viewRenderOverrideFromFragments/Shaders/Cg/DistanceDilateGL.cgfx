@@ -1,0 +1,128 @@
+// ===========================================================================
+// Copyright 2016 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+
+// DESCRIPTION: Distance dilate effect.
+//**************************************************************************/
+
+// #include "Common.cgh"
+
+// World-view-projection transformation.
+float4x4 gWVPXf : WorldViewProjection 
+< 
+	string UIWidget = "None"; 
+	bool rowMajor = true;
+>;
+
+// Screen size, in pixels.
+float2 gScreenSize : ViewportPixelSize < string UIWidget = "None"; >;
+static float2 gTexelSize = 1.0f / gScreenSize;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Screen Quad Vertex Shader
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Vertex shader input structure.
+struct VS_INPUT_ScreenQuad
+{
+    float3 Pos : POSITION;
+    float2 UV : TEXCOORD0;
+};
+
+// Vertex shader output structure.
+struct VS_TO_PS_ScreenQuad
+{
+    float4 HPos : POSITION;
+    float2 UV : TEXCOORD0;
+};
+
+// Vertex shader.
+VS_TO_PS_ScreenQuad VS_ScreenQuad(VS_INPUT_ScreenQuad In)
+{
+    VS_TO_PS_ScreenQuad Out;
+    
+    // Output the position and texture coordinates directly.
+    #ifdef FX_COMPOSER
+        Out.HPos = float4(In.Pos, 1.0f);
+        Out.UV = In.UV + 0.5f / gScreenSize; // D3D9 texel offset
+    #else
+        Out.HPos = mul(float4(In.Pos, 1.0f), gWVPXf);
+        Out.UV = In.UV;
+    #endif
+    
+    return Out;
+}
+
+// The dilate amount (number of samples in each direction, or the "radius" of the filter).  Use this
+// to determine the number of samples per pixel, including the center sample.
+int gAmount = 1;
+static int gNumSamples = gAmount * 2 + 1;
+
+// The source buffer and sampler.
+texture2D gSourceTex < string UIWidget = "None"; > = NULL;
+sampler2D gSourceSamp = sampler_state
+{
+    texture = <gSourceTex>;
+};
+
+// Pixel shader.
+// NOTE: This expects screen quad vertex shader output.
+float4 PS_Dilate(VS_TO_PS_ScreenQuad In, uniform sampler2D source, uniform float2 direction) : COLOR0
+{
+    // Return immediately if the center sample does not have the maximum depth.  Dilation will only
+    // happen where the depth is 1.0.
+    float current = tex2Dlod(source, float4(In.UV, 0.0f, 0.0f)).r;
+    if (current != 1.0f) return current;
+
+    // Compute the per-sample offset, based on the texel size and dilate direction.  Then compute
+    // the location of the starting sample, using the number of taps.
+    float2 offset = direction * gTexelSize;
+    float2 UV = In.UV - offset * (gNumSamples - 1) * 0.5f;
+    
+    // Sum each of the samples (box filter).
+    float sum = 0.0f;
+    int count = 0;
+    for(int i = 0; i < gNumSamples; i++)
+    {
+        // Add the value from the source texture if it does not have the maximum depth; 1.0 depth
+        // values are completely ignored.  That is what makes this a dilation filter.
+        float value = tex2Dlod(source, float4(UV, 0.0f, 0.0f)).r;
+        if (value != 1.0f)
+        {
+            sum += value;
+            count++;
+        }
+
+        // Increment the texture coordinates by the offset.
+        UV += offset;
+    }
+    
+    // Return the average color and alpha.
+    return count == 0 ? 1.0f : sum / count;
+}
+
+// Horizontal dilate technique.
+technique DilateHoriz
+{
+    pass p0
+    {
+        VertexShader = compile glslv VS_ScreenQuad();
+        PixelShader = compile glslf PS_Dilate(gSourceSamp, float2(1.0f, 0.0f));
+        // A horizontal dilate direction is specified as an argument above.
+    }
+}
+
+// Vertical dilate technique.
+technique DilateVert
+{
+    pass p0
+    {
+        VertexShader = compile glslv VS_ScreenQuad();
+        PixelShader = compile glslf PS_Dilate(gSourceSamp, float2(0.0f, 1.0f));
+        // A vertical dilate direction is specified as an argument above.
+    }
+}

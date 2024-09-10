@@ -1,0 +1,51 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="ClearTargetAndDepth_0" name="ClearTargetAndDepth" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Clear a render tatget and depth target filling them with the provided values]]>
+</description>
+    <properties>
+        <target  name="final" />
+        <target  name="finalDesc" />
+        <float4  name="viewport" />
+        <target  name="depthstencil" />
+        <int  name="clearFlag" />
+        <float4  name="clearColor" />
+        <float  name="clearDepth" />
+        <float4  name="clearRegion" />
+        <int  name="clearStencil" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearFlag" value="7"  />
+<float4 name="clearColor" value="0.000000,0.000000,0.000000,0.000000"  />
+<float name="clearDepth" value="1.000000"  />
+<float4 name="clearRegion" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearStencil" value="0"  />
+    </values>
+    <outputs>
+        <target  name="output" />
+        <target  name="depthOut" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <AssignTarget destName="localClearTarg" srcName="@final" format="@finalDesc" />
+            <SetTarget index="0" value="localClearTarg" />
+            <SetViewport value="@viewport" />
+            <SetDepthStencil value="@depthstencil" />
+            <ClearRegion color="@clearColor" depth="@clearDepth" stencil="@clearStencil" clearRegion="@clearRegion" clearFlag="@clearFlag" />
+            <SetParameter name="@output" value="localClearTarg" />
+            <SetParameter name="@depthOut" value="@depthstencil" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="1e81f0c0-98a5-4781-b12c-89c15fcb6162" name="default look (ACEScc)" version="1.3">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>Apply the Default Look transform specified in Preferences via an ACEScc workflow</Description>
+    <InputDescriptor>Academy Color Encoding Specification (ACES2065-1)</InputDescriptor>
+    <OutputDescriptor>Academy Color Encoding Specification (ACES2065-1)</OutputDescriptor>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="interchange/ACESproxy/ACES2065-1_to_ACEScc.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference alias="defaultLook" inBitDepth="16f" outBitDepth="16f">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="interchange/ACESproxy/ACEScc_to_ACES2065-1.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+</ProcessList>

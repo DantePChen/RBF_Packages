@@ -1,0 +1,193 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment_graph  name="Reflection_Renderer" ref="Reflection_Renderer" class="FragmentGraph" version="1.0" feature_level="0" >
+    <fragments>
+            <fragment_ref name="simpleBlitScript" ref="simpleBlitScript" />
+            <fragment_ref name="FinalTarget" ref="TargetPassThrough" />
+            <fragment_ref name="Operator_IfElse_RenderTarget_0" ref="Operator_IfElse_RenderTarget" />
+            <fragment_ref name="maya_DepthPrePass" ref="maya_DepthPrePass" />
+            <fragment_ref name="Maya_PostEffects" ref="Maya_PostEffects" />
+            <fragment_ref name="Operator_IfElse_RenderTarget" ref="Operator_IfElse_RenderTarget" />
+            <fragment_ref name="OffscreenTarget_0_0" ref="NPR_OffscreenTarget_Imp" />
+            <fragment_ref name="Maya_IfAnyEffects" ref="Maya_IfAnyEffects" />
+            <fragment_ref name="MayaShadedBeauty" ref="MayaShadedBeauty" />
+            <fragment_ref name="DrawPreUIOption" ref="DrawPreUIOption" />
+            <fragment_ref name="DrawPostUIOption" ref="DrawPostUIOption" />
+            <fragment_ref name="DepthPassThrough" ref="DepthPassThrough" />
+    </fragments>
+    <connections>
+        <connect from="FinalTarget.output" to="simpleBlitScript.input" name="input" />
+        <connect from="OffscreenTarget_0_0.output" to="simpleBlitScript.final" name="final" />
+        <connect from="Maya_IfAnyEffects.anyEffects" to="Operator_IfElse_RenderTarget_0.value" name="value" />
+        <connect from="Maya_PostEffects.output" to="Operator_IfElse_RenderTarget_0.a" name="a" />
+        <connect from="MayaShadedBeauty.output" to="Operator_IfElse_RenderTarget_0.b" name="b" />
+        <connect from="DepthPassThrough.output" to="maya_DepthPrePass.depth" name="depth" />
+        <connect from="FinalTarget.output" to="Maya_PostEffects.final" name="final" />
+        <connect from="MayaShadedBeauty.output" to="Maya_PostEffects.sceneBuffer" name="sceneBuffer" />
+        <connect from="MayaShadedBeauty.output" to="Maya_PostEffects.maya_SceneNormalFinal" name="maya_SceneNormalFinal" />
+        <connect from="DepthPassThrough.output" to="Maya_PostEffects.depth" name="depth" />
+        <connect from="Maya_IfAnyEffects.noEffects" to="Operator_IfElse_RenderTarget.value" name="value" />
+        <connect from="FinalTarget.output" to="Operator_IfElse_RenderTarget.a" name="a" />
+        <connect from="simpleBlitScript.output" to="Operator_IfElse_RenderTarget.b" name="b" />
+        <connect from="Operator_IfElse_RenderTarget.res" to="MayaShadedBeauty.final" name="final" />
+        <connect from="maya_DepthPrePass.depthOut" to="MayaShadedBeauty.preZ" name="preZ" />
+        <connect from="DrawPreUIOption.res" to="MayaShadedBeauty.drawUI" name="drawUI" />
+        <connect from="DepthPassThrough.output" to="MayaShadedBeauty.depth" name="depth" />
+        <connect from="DrawPostUIOption.output" to="MayaShadedBeauty.drawUIList" name="drawUIList" />
+        <connect from="maya_DepthPrePass.opaquedepthtexture" to="MayaShadedBeauty.opaquedepthtexture" name="opaquedepthtexture" />
+        <connect from="Maya_IfAnyEffects.noEffects" to="DrawPreUIOption.b" name="b" />
+        <connect from="Maya_IfAnyEffects.noEffects" to="DrawPostUIOption.noEffects" name="noEffects" />
+    </connections>
+    <properties>
+        <bool  name="ssaoEnabled" ref="Maya_IfAnyEffects.ssaoEnabled" />
+        <bool  name="mbEnabled" ref="Maya_IfAnyEffects.mbEnabled" />
+        <bool  name="dofEnabled" ref="Maya_IfAnyEffects.dofEnabled" />
+        <countedObject  name="opaqueUIList" ref="Maya_PostEffects.opaqueUIList" />
+        <countedObject  name="opaqueUI2DList" ref="Maya_PostEffects.opaqueUI2DList" />
+        <countedObject  name="transparentBitmapsList" ref="Maya_PostEffects.transparentBitmapsList" />
+        <countedObject  name="transparentUIList" ref="Maya_PostEffects.transparentUIList" />
+        <countedObject  name="transparentUI2DList" ref="Maya_PostEffects.transparentUI2DList" />
+        <countedObject  name="xrayUIList" ref="Maya_PostEffects.xrayUIList" />
+        <camera  name="camera" ref="Maya_PostEffects.camera" />
+        <camera  name="camera2D" ref="Maya_PostEffects.camera2D" />
+        <world  name="preOpaqueUIList" ref="Maya_PostEffects.opaqueUIList" />
+        <world  name="preTransparentUIBitmapsList" ref="Maya_PostEffects.transparentBitmapsList" />
+        <world  name="preTransparentUIList" ref="Maya_PostEffects.transparentUIList" />
+        <target  name="final" ref="FinalTarget.input" />
+        <target  name="finalDesc" ref="Maya_PostEffects.finalDesc" />
+        <float4  name="viewport" ref="Maya_PostEffects.viewport" />
+        <target  name="maya_DOFEffect_final" ref="Maya_PostEffects.final" />
+        <target  name="maya_MotionBlurEffectV1_final" ref="Maya_PostEffects.final" />
+        <target  name="Maya_SSAO_Beauty_final" ref="Maya_PostEffects.final" />
+        <countedObject  name="transpList" ref="MayaShadedBeauty.transpList" />
+        <countedObject  name="unsupportedTranspList" ref="MayaShadedBeauty.unsupportedTranspList" />
+        <countedObject  name="opaqueList" ref="MayaShadedBeauty.opaqueList" />
+        <int  name="clearDepthFlag" ref="simpleBlitScript.clearDepthFlag" />
+        <float4  name="clearColor" ref="simpleBlitScript.clearColor" />
+        <float  name="clearZ" ref="simpleBlitScript.clearZ" />
+        <int  name="clearStencil" ref="simpleBlitScript.clearStencil" />
+        <bool  name="disableAlpha" ref="simpleBlitScript.disableAlpha" />
+        <bool  name="verticalFlip" ref="simpleBlitScript.verticalFlip" />
+        <bool  name="evaluateAll" ref="Operator_IfElse_RenderTarget.evaluateAll" />
+        <countedObject  name="geometryMaskList" ref="maya_DepthPrePass.geometryMaskList" />
+        <bool  name="useZPrePass" ref="maya_DepthPrePass.useZPrePass" />
+        <target  name="depth" ref="DepthPassThrough.depth" />
+        <bool  name="isPreUI" ref="MayaShadedBeauty.isPreUI" />
+        <bool  name="enableLineAA" ref="MayaShadedBeauty.enableLineAA" />
+        <bool  name="drawPreUI" ref="DrawPreUIOption.a" />
+        <effectInstance  name="materialOverrideInstance" ref="MayaShadedBeauty.materialOverrideInstance" />
+        <bool  name="drawOpaqueList" ref="MayaShadedBeauty.drawOpaqueList" />
+        <bool  name="opaqueListsEmpty" ref="MayaShadedBeauty.opaqueListsEmpty" />
+        <bool  name="drawPostUI" ref="DrawPostUIOption.drawPostUI" />
+        <bool  name="drawTransparentList" ref="MayaShadedBeauty.drawTransparentList" />
+        <bool  name="transpListsEmpty" ref="MayaShadedBeauty.transpListsEmpty" />
+        <float4  name="scissorRect" ref="MayaShadedBeauty.scissorRect" />
+        <bool  name="backfaceTransparency" ref="MayaShadedBeauty.backfaceTransparency" />
+        <bool  name="highPrecisionTarget" ref="MayaShadedBeauty.highPrecisionTarget" />
+        <bool  name="listEmpty" ref="MayaShadedBeauty.listEmpty" />
+        <target  name="evaluate5" ref="MayaShadedBeauty.evaluate5" evaluatedByOwner="true"  />
+        <target  name="evaluate6" ref="MayaShadedBeauty.evaluate6" evaluatedByOwner="true"  />
+        <target  name="evaluate7" ref="MayaShadedBeauty.evaluate7" evaluatedByOwner="true"  />
+        <target  name="evaluate8" ref="MayaShadedBeauty.evaluate8" evaluatedByOwner="true"  />
+        <bool  name="Maya_NDRenderer_Front_FrontFaces" ref="Maya_PostEffects.FrontFaces" />
+        <bool  name="EnableSSAO" ref="Maya_PostEffects.EnableNormalDepth32" />
+        <bool  name="SupportsClipping" ref="Maya_PostEffects.SupportsClipping" />
+        <target  name="backFaceDepth" ref="Maya_PostEffects.backFaceDepth" />
+        <int  name="SampleCount" ref="Maya_PostEffects.SampleCount" />
+        <float  name="SampleRadius" ref="Maya_PostEffects.SampleRadius" />
+        <int  name="BlurAmount" ref="Maya_PostEffects.BlurAmount" />
+        <bool  name="BlurDouble" ref="Maya_PostEffects.BlurDouble" />
+        <float  name="CompositeFactor" ref="Maya_PostEffects.CompositeFactor" />
+        <float3  name="CompositeColor" ref="Maya_PostEffects.CompositeColor" />
+        <float  name="shutterOpenFraction" ref="Maya_PostEffects.shutterOpenFraction" />
+        <bool  name="useQuadraticMotionBlur" ref="Maya_PostEffects.useQuadraticMotionBlur" />
+        <float  name="zThreshold" ref="Maya_PostEffects.zThreshold" />
+        <int  name="blurStepCount" ref="Maya_PostEffects.blurStepCount" />
+        <float  name="motionFadeAmt" ref="Maya_PostEffects.motionFadeAmt" />
+        <float  name="motionFadeEmphasis" ref="Maya_PostEffects.motionFadeEmphasis" />
+        <float4  name="motionFadeTint" ref="Maya_PostEffects.motionFadeTint" />
+        <bool  name="motionBlurDebugOn" ref="Maya_PostEffects.motionBlurDebugOn" />
+        <float  name="alpha" ref="Maya_PostEffects.alpha" />
+        <float  name="focusDistance" ref="Maya_PostEffects.focusDistance" />
+        <float  name="cocAtInfinity" ref="Maya_PostEffects.cocAtInfinity" />
+        <float  name="maxCocScale" ref="Maya_PostEffects.maxCocScale" />
+        <int  name="sampleSpacing1" ref="Maya_PostEffects.sampleSpacing1" />
+        <int  name="searchRadius1" ref="Maya_PostEffects.searchRadius1" />
+        <float  name="acceptThreshold" ref="Maya_PostEffects.acceptThreshold" />
+        <int  name="sampleSpacing2" ref="Maya_PostEffects.sampleSpacing2" />
+        <int  name="searchRadius2" ref="Maya_PostEffects.searchRadius2" />
+        <float  name="spreadScale" ref="Maya_PostEffects.spreadScale" />
+        <bool  name="debugOn" ref="Maya_PostEffects.debugOn" />
+        <world  name="world" ref="Maya_PostEffects.world" />
+        <effectInstance  name="imposterEffect" ref="Maya_PostEffects.imposterEffect" />
+        <simpleMesh  name="imposterMesh" ref="Maya_PostEffects.imposterMesh" />
+        <bool  name="DrawImposterForCell" ref="Maya_PostEffects.DrawImposterForCell" />
+        <bool  name="multiThreaded" ref="Maya_PostEffects.multiThreaded" />
+        <bool  name="occurrencePath" ref="Maya_PostEffects.occurrencePath" />
+        <countedObject  name="nonPostEffectList" ref="Maya_PostEffects.nonPostEffectList" />
+        <countedObject  name="postEffectList" ref="Maya_PostEffects.postEffectList" />
+    </properties>
+    <values>
+<bool name="dofEnabled" value="false"  />
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearDepthFlag" value="7"  />
+<float4 name="clearColor" value="0.000000,0.000000,0.000000,0.000000"  />
+<float name="clearZ" value="1.000000"  />
+<int name="clearStencil" value="0"  />
+<bool name="disableAlpha" value="false"  />
+<bool name="verticalFlip" value="false"  />
+<bool name="useZPrePass" value="true"  />
+<bool name="isPreUI" value="true"  />
+<bool name="enableLineAA" value="false"  />
+<bool name="drawPreUI" value="true"  />
+<bool name="drawOpaqueList" value="true"  />
+<bool name="opaqueListsEmpty" value="false"  />
+<bool name="drawPostUI" value="true"  />
+<bool name="drawTransparentList" value="true"  />
+<bool name="transpListsEmpty" value="true"  />
+<float4 name="scissorRect" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="backfaceTransparency" value="true"  />
+<bool name="highPrecisionTarget" value="false"  />
+<bool name="listEmpty" value="true"  />
+<bool name="Maya_NDRenderer_Front_FrontFaces" value="true"  />
+<bool name="EnableSSAO" value="true"  />
+<bool name="SupportsClipping" value="false"  />
+<int name="SampleCount" value="16"  />
+<float name="SampleRadius" value="0.028107"  />
+<int name="BlurAmount" value="8"  />
+<bool name="BlurDouble" value="true"  />
+<float name="CompositeFactor" value="1.000000"  />
+<float3 name="CompositeColor" value="0.000000,0.000000,0.000000"  />
+<float name="shutterOpenFraction" value="0.200000"  />
+<bool name="useQuadraticMotionBlur" value="false"  />
+<float name="zThreshold" value="0.100000"  />
+<int name="blurStepCount" value="15"  />
+<float name="motionFadeAmt" value="0.000000"  />
+<float name="motionFadeEmphasis" value="0.000000"  />
+<float4 name="motionFadeTint" value="1.000000,1.000000,1.000000,1.000000"  />
+<bool name="motionBlurDebugOn" value="false"  />
+<float name="alpha" value="0.607640"  />
+<float name="focusDistance" value="5.000000"  />
+<float name="cocAtInfinity" value="0.607640"  />
+<float name="maxCocScale" value="5.000000"  />
+<int name="sampleSpacing1" value="1"  />
+<int name="searchRadius1" value="1"  />
+<float name="acceptThreshold" value="0.050000"  />
+<int name="sampleSpacing2" value="2"  />
+<int name="searchRadius2" value="3"  />
+<float name="spreadScale" value="1.000000"  />
+<bool name="debugOn" value="false"  />
+<bool name="DrawImposterForCell" value="true"  />
+<bool name="multiThreaded" value="false"  />
+<bool name="occurrencePath" value="true"  />
+    </values>
+    <outputs>
+        <target  name="res" ref="Operator_IfElse_RenderTarget_0.res" />
+    </outputs>
+</fragment_graph>

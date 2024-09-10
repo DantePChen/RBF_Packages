@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="5455fb58-426c-46c6-aab1-128b99069116" name="ACES 0.7 to sRGB" version="1.5">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>ACES Reference Rendering Transform + sRGB Output Device Transform</Description>
+    <Description>aces_dev version 0.7</Description>
+    <InputDescriptor>Academy Color Encoding Specification (ACES)</InputDescriptor>
+    <OutputDescriptor>DCI X'Y'Z', ACES neutrals mapped to the D60 axis</OutputDescriptor>
+    <ExposureContrast inBitDepth="16f" outBitDepth="16f" style="linear">
+        <DynamicParameter param="EXPOSURE" />
+        <DynamicParameter param="CONTRAST" />
+        <ECParams contrast="1.0000" exposure="0.0000" pivot="0.1800" />
+    </ExposureContrast>
+    <Reference basePath="Autodesk" bypass="true" inBitDepth="16f" outBitDepth="16f" path="misc/default_look-ACESproxy.ctf">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/ACES_to_CIE-XYZ_v0.7.ctf" />
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 1.06349551678  0.00640890980 -0.01580678672
+-0.49207413197  1.36822342873  0.09133709222
+-0.00281646173  0.00464417133  0.91641861200
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Description>BPC</Description>
+        <Array dim="3 4 3">
+ 1.0000333786011  0.0000000000000  0.0000000000000 -0.0000333355557
+ 0.0000000000000  1.0000333786011  0.0000000000000 -0.0000333355557
+ 0.0000000000000  0.0000000000000  1.0000333786011 -0.0000333355557
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 0.93827986717 -0.00445144577  0.01662752405
+ 0.33736890554  0.72952157259 -0.06689045578
+ 0.00117395085 -0.00371070649  1.09159445763
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 3.2409698963 -1.5373831987 -0.4986107647
+-0.9692436457  1.8759675026  0.0415550582
+ 0.0556300804 -0.2039769590  1.0569715500
+        </Array>
+    </Matrix>
+    <GamutMap inBitDepth="16f" outBitDepth="16f" style="dw3b" />
+    <Gamma inBitDepth="16f" outBitDepth="12i" style="moncurveRev">
+        <GammaParams gamma="2.400000000000000" offset="0.055000" />
+    </Gamma>
+</ProcessList>

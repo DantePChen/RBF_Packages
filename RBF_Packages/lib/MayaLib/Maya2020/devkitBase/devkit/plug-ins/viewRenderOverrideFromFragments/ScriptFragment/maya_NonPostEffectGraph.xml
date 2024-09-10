@@ -1,0 +1,47 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment_graph  name="Maya_NonPostEffects" ref="maya_NonPostEffectGraph" class="FragmentGraph" version="1.0" feature_level="30" >
+    <description>non-post-effect</description>
+    <keyword value="SceneDraw" />
+    <fragments>
+            <fragment_ref name="mayaNonPECompositeScript" ref="mayaNonPECompositeScript" />
+            <fragment_ref name="mayaNonPEAlphaMaskScript" ref="mayaNonPEAlphaMaskScript" />
+    </fragments>
+    <connections>
+        <connect from="mayaNonPEAlphaMaskScript.output" to="mayaNonPECompositeScript.maya_NonPEAlphaMask" name="maya_NonPEAlphaMask" />
+        <connect from="mayaNonPEAlphaMaskScript.listEmpty" to="mayaNonPECompositeScript.listEmpty" name="listEmpty" />
+    </connections>
+    <properties>
+        <target  name="final" ref="mayaNonPECompositeScript.final" />
+        <target  name="finalDesc" ref="mayaNonPECompositeScript.finalDesc" />
+        <float4  name="viewport" ref="mayaNonPECompositeScript.viewport" />
+        <target  name="maya_ScenePostEffectFinal" ref="mayaNonPECompositeScript.maya_ScenePostEffectFinal" />
+        <target  name="maya_SceneNormalFinal" ref="mayaNonPECompositeScript.maya_SceneNormalFinal" />
+        <world  name="world" ref="mayaNonPEAlphaMaskScript.world" />
+        <camera  name="camera" ref="mayaNonPEAlphaMaskScript.camera" />
+        <string  name="drawAgents" ref="mayaNonPEAlphaMaskScript.drawAgents" />
+        <effectInstance  name="imposterEffect" ref="mayaNonPEAlphaMaskScript.imposterEffect" />
+        <simpleMesh  name="imposterMesh" ref="mayaNonPEAlphaMaskScript.imposterMesh" />
+        <bool  name="DrawImposterForCell" ref="mayaNonPEAlphaMaskScript.DrawImposterForCell" />
+        <bool  name="multiThreaded" ref="mayaNonPEAlphaMaskScript.multiThreaded" />
+        <bool  name="occurrencePath" ref="mayaNonPEAlphaMaskScript.occurrencePath" />
+        <countedObject  name="nonPostEffectList" ref="mayaNonPEAlphaMaskScript.nonPostEffectList" />
+        <countedObject  name="postEffectList" ref="mayaNonPEAlphaMaskScript.postEffectList" />
+        <target  name="maya_NonPEAlphaMaskTarget" ref="mayaNonPEAlphaMaskScript.maya_NonPEAlphaMaskTarget" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="DrawImposterForCell" value="true"  />
+<bool name="multiThreaded" value="false"  />
+<bool name="occurrencePath" value="true"  />
+    </values>
+    <outputs>
+        <target  name="output" ref="mayaNonPECompositeScript.output" />
+    </outputs>
+</fragment_graph>

@@ -1,0 +1,200 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="VE_PlanarReflection_RenderFragment" name="VE_PlanarReflection_RenderFragment" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Planar reflection renderer.  Modifies and assigns a reflection map to a plane and renders the plane into the final color and depth buffers.]]>
+</description>
+    <properties>
+        <world  name="world" />
+        <camera  name="camera" />
+        <target  name="final" />
+        <target  name="depthstencil" />
+        <target  name="previousScript" />
+        <float4  name="viewport" />
+        <bool  name="EnableReflection" />
+        <renderer   name="defaultRenderer" />
+        <renderer   name="renderer" />
+        <target  name="ReflectionMap" />
+        <target  name="DistanceMap" />
+        <color  name="Color" />
+        <float  name="Saturation" />
+        <int  name="IntensityType" />
+        <float2  name="Intensity" />
+        <int  name="BlurType" />
+        <int2  name="BlurAmount" />
+        <bool  name="multiThreaded" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="EnableReflection" value="true"  />
+<color name="Color" value="0.521569,0.521569,0.521569"  />
+<float name="Saturation" value="0.500000"  />
+<int name="IntensityType" value="3"  />
+<float2 name="Intensity" value="0.800000,0.100000"  />
+<int name="BlurType" value="3"  />
+<int2 name="BlurAmount" value="0,9"  />
+<bool name="multiThreaded" value="false"  />
+    </values>
+    <outputs>
+        <target  name="output" />
+        <alias name="depthstencil" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <Declare name="localRenderer" type="ScriptPipeRenderer" />
+            <If value="@renderer" />
+            <SetParameter name="localRenderer" value="@renderer" />
+            <Else />
+            <SetParameter name="localRenderer" value="@defaultRenderer" />
+            <EndIf />
+            <SetRenderer name="localRenderer" />
+            <SetRenderParameter renderer="localRenderer" name="MultiThreaded" value="@multiThreaded" />
+            <If value="@EnableReflection" />
+            <SetDepthStencil value="" />
+            <Declare name="_BlurAmount" type="float2" />
+            <Declare name="_UseBlurMain" type="bool" />
+            <Declare name="_UseBlurMain_Amount" type="int" />
+            <Declare name="_UseBlurExtra" type="bool" />
+            <Declare name="_UseDistance" type="bool" />
+            <Declare name="_UseDistanceDilate" type="bool" />
+            <Declare name="_UseDistanceDilate_Amount" type="int" />
+            <Call name="PlanarReflectionCallback" />
+            <If value="_UseBlurMain" />
+            <AcquireTarget name="tempBlur" format="@ReflectionMap.format" size="@ReflectionMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <SetEffect name="BlurH" path="Blur" technique="BlurHoriz" macrolist="BLUR_AMOUNT=_UseBlurMain_Amount" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="PointClamp" texture="@ReflectionMap" />
+            <SetEffectParameter effect="BlurH" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="tempBlur" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurV" path="Blur" technique="BlurVert" macrolist="BLUR_AMOUNT=_UseBlurMain_Amount" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="PointClamp" texture="tempBlur" />
+            <SetEffectParameter effect="BlurV" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="@ReflectionMap" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="" texture="" />
+            <EndIf />
+            <If value="_UseBlurExtra" />
+            <AcquireTarget name="tempBlur" format="@ReflectionMap.format" size="@ReflectionMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <AcquireTarget name="blurMap1" format="@ReflectionMap.format" size="@ReflectionMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <AcquireTarget name="blurMap2" format="@ReflectionMap.format" size="@ReflectionMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <AcquireTarget name="blurMap3" format="@ReflectionMap.format" size="@ReflectionMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <SetEffect name="BlurH" path="Blur" technique="BlurHoriz" macrolist="BLUR_AMOUNT=2" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="PointClamp" texture="@ReflectionMap" />
+            <SetEffectParameter effect="BlurH" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="tempBlur" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurV" path="Blur" technique="BlurVert" macrolist="BLUR_AMOUNT=2" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="PointClamp" texture="tempBlur" />
+            <SetEffectParameter effect="BlurV" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="blurMap1" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurH" path="Blur" technique="BlurHoriz" macrolist="BLUR_AMOUNT=6" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="PointClamp" texture="@ReflectionMap" />
+            <SetEffectParameter effect="BlurH" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="tempBlur" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurV" path="Blur" technique="BlurVert" macrolist="BLUR_AMOUNT=6" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="PointClamp" texture="tempBlur" />
+            <SetEffectParameter effect="BlurV" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="blurMap2" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurH" path="Blur" technique="BlurHoriz" macrolist="BLUR_AMOUNT=12" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="PointClamp" texture="@ReflectionMap" />
+            <SetEffectParameter effect="BlurH" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="tempBlur" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurH" name="gSourceTex" value="" texture="" />
+            <SetEffect name="BlurV" path="Blur" technique="BlurVert" macrolist="BLUR_AMOUNT=12" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="PointClamp" texture="tempBlur" />
+            <SetEffectParameter effect="BlurV" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="blurMap3" />
+            <Render name="Quad" />
+            <SetTexture effect="BlurV" name="gSourceTex" value="" texture="" />
+            <EndIf />
+            <If value="_UseDistanceDilate" />
+            <AcquireTarget name="tempDilate" format="@DistanceMap.format" size="@DistanceMap.size" relSize="1.0,1.0" msaa="@finalDesc.NumMSAASamples" />
+            <SetEffect name="DilateH" path="DistanceDilate" technique="DilateHoriz" />
+            <SetEffectParameter effect="DilateH" name="gAmount" value="_UseDistanceDilate_Amount" />
+            <SetTexture effect="DilateH" name="gSourceTex" value="PointClamp" texture="@DistanceMap" />
+            <SetEffectParameter effect="DilateH" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="tempDilate" />
+            <Render name="Quad" />
+            <SetTexture effect="DilateH" name="gSourceTex" value="" texture="" />
+            <SetEffect name="DilateV" path="DistanceDilate" technique="DilateVert" />
+            <SetEffectParameter effect="DilateV" name="gAmount" value="_UseDistanceDilate_Amount" />
+            <SetTexture effect="DilateV" name="gSourceTex" value="PointClamp" texture="tempDilate" />
+            <SetEffectParameter effect="DilateV" name="gSourceSamp" value="PointClamp" />
+            <SetTarget index="0" value="@DistanceMap" />
+            <Render name="Quad" />
+            <SetTexture effect="DilateV" name="gSourceTex" value="" texture="" />
+            <EndIf />
+            <SetEffect name="Main" path="PlanarReflection_Render" technique="" macrolist="INTENSITY_TYPE=@IntensityType,BLUR_TYPE=@BlurType" />
+            <SetEffectParameter effect="Main" name="gColor" value="@Color" />
+            <SetEffectParameter effect="Main" name="gSaturation" value="@Saturation" />
+            <SetEffectParameter effect="Main" name="gIntensity" value="@Intensity" />
+            <SetEffectParameter effect="Main" name="gBlurAmount" value="_BlurAmount" />
+            <SetTexture effect="Main" name="gReflectionTex" value="PointClamp" texture="@ReflectionMap" />
+            <SetEffectParameter effect="Main" name="gReflectionSamp" value="PointClamp" />
+            <If value="_UseBlurExtra" />
+            <SetTexture effect="Main" name="gBlur1Tex" value="PointClamp" texture="blurMap1" />
+            <SetEffectParameter effect="Main" name="gBlur1Samp" value="PointClamp" />
+            <SetTexture effect="Main" name="gBlur2Tex" value="PointClamp" texture="blurMap2" />
+            <SetEffectParameter effect="Main" name="gBlur2Samp" value="PointClamp" />
+            <SetTexture effect="Main" name="gBlur3Tex" value="PointClamp" texture="blurMap3" />
+            <SetEffectParameter effect="Main" name="gBlur3Samp" value="PointClamp" />
+            <EndIf />
+            <If value="_UseDistance" />
+            <SetTexture effect="Main" name="gDistanceTex" value="PointClamp" texture="@DistanceMap" />
+            <SetEffectParameter effect="Main" name="gDistanceSamp" value="PointClamp" />
+            <EndIf />
+            <SetCamera value="@camera" />
+            <Declare name="localState" type="stateSetter" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="SourceBlend" value="SourceAlpha" index="0" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="DestinationBlend" value="InvSourceAlpha" index="0" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="AlphaSourceBlend" value="Zero" index="0" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="AlphaDestinationBlend" value="One" index="0" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="SetBlendEnable" value="true" index="0" />
+            <SetStateCommand commandName="SetStateParameter" name="localState" parameter="CullMode" value="ECullBack" />
+            <SetStateCommand commandName="SetRenderState" name="localState" parameter="ZLessEqualNoW" />
+            <SetStateCommand commandName="CommitNewState" name="localState" />
+            <SetTarget index="0" value="@final" />
+            <SetViewport value="@viewport" />
+            <SetDepthStencil value="@depthstencil" />
+            <Render name="@world" />
+            <SetTexture effect="Main" name="gReflectionTex" value="" texture="" />
+            <If value="_UseBlurExtra" />
+            <SetTexture effect="Main" name="gBlur1Tex" value="" texture="" />
+            <SetTexture effect="Main" name="gBlur2Tex" value="" texture="" />
+            <SetTexture effect="Main" name="gBlur3Tex" value="" texture="" />
+            <EndIf />
+            <If value="_UseDistance" />
+            <SetTexture effect="Main" name="gDistanceTex" value="" texture="" />
+            <EndIf />
+            <SetStateCommand commandName="RestorePreviousState" name="localState" />
+            <Else />
+            <SetTarget index="0" value="@final" />
+            <SetViewport value="@viewport" />
+            <Render name="@emptyWorld" />
+            <EndIf />
+            <SetParameter name="@output" value="@final" />
+            <SetParameter name="@renderOut" value="localRenderer" />
+            <SetDepthStencil value="" />
+            <RestoreOverrideEffect />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

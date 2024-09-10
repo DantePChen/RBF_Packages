@@ -1,0 +1,26 @@
+from typing import Any, Container, Dict, Generic, Iterable, Iterator, List, Optional, Set, Tuple, TypeVar, Union
+import maya.api.OpenMaya as OpenMaya
+import itertools
+
+
+from collections import deque
+from maya.app.renderSetup.model.memberSet import MemberSet
+
+
+if False:
+    from typing import Dict, List, Tuple, Union, Optional
+
+def traverseDepthFirst(objs, direction='0', predicate="'<function <lambda>>'"): ...
+def _traverseOne(obj, nexts, predicate, visited): ...
+def traverseBreadthFirst(objs, direction='0', predicate="'<function <lambda>>'"): ...
+def traverse(objs, strategy='0', direction='0', predicate="'<function <lambda>>'"): ...
+def _hierarchy(path): ...
+def _getSources(node): ...
+def _getDestinations(node): ...
+def hierarchy(paths): ...
+
+
+kBreadthFirst : int
+kDepthFirst : int
+kUpstream = kDepthFirst
+

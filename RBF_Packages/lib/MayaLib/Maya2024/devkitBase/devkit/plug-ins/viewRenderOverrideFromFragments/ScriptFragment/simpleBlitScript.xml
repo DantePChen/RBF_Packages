@@ -1,0 +1,54 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="simpleBlitScript" name="simpleBlitScript" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="0" >
+    <description>
+<![CDATA[
+Simple blit of a target to another target]]>
+</description>
+    <properties>
+        <target  name="input" />
+        <target  name="final" />
+        <int  name="clearDepthFlag" />
+        <float4  name="clearColor" />
+        <float  name="clearZ" />
+        <int  name="clearStencil" />
+        <float4  name="viewport" />
+        <bool  name="disableAlpha" />
+        <bool  name="verticalFlip" />
+    </properties>
+    <values>
+<int name="clearDepthFlag" value="7"  />
+<float4 name="clearColor" value="0.000000,0.000000,0.000000,0.000000"  />
+<float name="clearZ" value="1.000000"  />
+<int name="clearStencil" value="0"  />
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="disableAlpha" value="false"  />
+<bool name="verticalFlip" value="false"  />
+    </values>
+    <outputs>
+        <target  name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <SetEffect name="SimpleBlitEffect" path="Copy" />
+            <SetTexture effect="SimpleBlitEffect" name="gInputTex" value="PointClamp" texture="@input" />
+            <SetViewport value="@viewport" />
+            <SetEffectParameter effect="SimpleBlitEffect" name="gDisableAlpha" value="@disableAlpha" />
+            <SetEffectParameter effect="SimpleBlitEffect" name="gVerticalFlip" value="@verticalFlip" />
+            <SetTarget index="0" value="@final" />
+            <Render name="Quad" />
+            <SetTexture effect="SimpleBlitEffect" name="gInputTex" value="" texture="" />
+            <SetParameter name="@output" value="@final" />
+            <SetEffect name="" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

@@ -1,0 +1,18 @@
+﻿  main.cpp
+  RBF_Solver_Compute.cpp
+  RBF_Solver_Node.cpp
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\half.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Node.cpp)
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\bfloat16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Node.cpp)
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\half.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Compute.cpp)
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\bfloat16.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Compute.cpp)
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\genericpacketmathfunctions.h(675): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Node.cpp)
+e:\rbf_solver_node\rbf_solver_node\lib\thirdparty\eigen-3.4.0\eigen\src\core\arch\default\genericpacketmathfunctions.h(675): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 RBF_Solver_Compute.cpp)
+e:\rbf_solver_node\rbf_solver_node\rbf_solver_compute.cpp(32): warning C4244: “初始化”: 从“Eigen::Index”转换到“int”，可能丢失数据
+    正在创建库 E:\RBF_Solver_Node\RBF_Solver_Node\\output\2023\RBF_Solver_Node.lib 和对象 E:\RBF_Solver_Node\RBF_Solver_Node\\output\2023\RBF_Solver_Node.exp
+  正在生成代码
+  2599 of 2624 functions (99.0%) were compiled, the rest were copied from previous compilation.
+    2387 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  RBF_Solver_Node.vcxproj -> E:\RBF_Solver_Node\RBF_Solver_Node\\output\2023\RBF_Solver_Node.mll
+  已复制         1 个文件。

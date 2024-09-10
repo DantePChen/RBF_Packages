@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="22eb8cab-018a-4eca-8ebd-5ab33867a5ff" version="1.4">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>Inverse ACES Reference Rendering Transform + P3-D60 Output Device Transform</Description>
+    <Description>aces_dev version 0.2</Description>
+    <InputDescriptor>P3 RGB, assumes projector calib. white is D60, gamma 2.6</InputDescriptor>
+    <OutputDescriptor>Academy Color Encoding Specification (ACES)</OutputDescriptor>
+    <Gamma inBitDepth="12i" outBitDepth="16f" style="basicFwd">
+        <GammaParams gamma="2.600000000000000" />
+    </Gamma>
+    <Range inBitDepth="16f" outBitDepth="16f">
+        <minInValue>0.0000000000e+00</minInValue>
+        <maxInValue>1.0000000000e+00</maxInValue>
+        <minOutValue>2.0833333334e-06</minOutValue>
+        <maxOutValue>1.0000000000e+00</maxOutValue>
+    </Range>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+0.497045636177 0.257803887129 0.195606365800
+0.234228834510 0.688681960106 0.077089190483
+0.000340576225 0.045918386430 1.042798757553
+        </Array>
+    </Matrix>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/CIE-XYZ_to_ACES_v0.2.ctf" />
+</ProcessList>

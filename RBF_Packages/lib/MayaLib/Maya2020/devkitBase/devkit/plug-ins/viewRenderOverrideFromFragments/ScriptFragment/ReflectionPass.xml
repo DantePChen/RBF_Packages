@@ -1,0 +1,148 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment_graph  name="ReflectionPass" ref="ReflectionPass" class="FragmentGraph" version="1.0" feature_level="0" >
+    <fragments>
+            <fragment_ref name="SSAOParameters" ref="SSAOParameters" />
+            <fragment_ref name="MotionBlurParameters" ref="MotionBlurParameters" />
+            <fragment_ref name="DOFParameters" ref="DOFParameters" />
+            <fragment_ref name="Reflection_Renderer" ref="Reflection_Renderer" />
+    </fragments>
+    <connections>
+        <connect from="SSAOParameters.enabled" to="Reflection_Renderer.ssaoEnabled" name="ssaoEnabled" />
+        <connect from="DOFParameters.enableDOF" to="Reflection_Renderer.dofEnabled" name="dofEnabled" />
+        <connect from="SSAOParameters.SampleCount" to="Reflection_Renderer.SampleCount" name="SampleCount" />
+        <connect from="SSAOParameters.SampleRadius" to="Reflection_Renderer.SampleRadius" name="SampleRadius" />
+        <connect from="SSAOParameters.BlurAmount" to="Reflection_Renderer.BlurAmount" name="BlurAmount" />
+        <connect from="SSAOParameters.CompositeFactor" to="Reflection_Renderer.CompositeFactor" name="CompositeFactor" />
+        <connect from="MotionBlurParameters.shutterOpenFraction" to="Reflection_Renderer.shutterOpenFraction" name="shutterOpenFraction" />
+        <connect from="MotionBlurParameters.useQuadraticMotionBlur" to="Reflection_Renderer.useQuadraticMotionBlur" name="useQuadraticMotionBlur" />
+        <connect from="MotionBlurParameters.zThreshold" to="Reflection_Renderer.zThreshold" name="zThreshold" />
+        <connect from="MotionBlurParameters.blurStepCount" to="Reflection_Renderer.blurStepCount" name="blurStepCount" />
+        <connect from="MotionBlurParameters.motionFadeAmt" to="Reflection_Renderer.motionFadeAmt" name="motionFadeAmt" />
+        <connect from="MotionBlurParameters.motionFadeEmphasis" to="Reflection_Renderer.motionFadeEmphasis" name="motionFadeEmphasis" />
+        <connect from="MotionBlurParameters.motionFadeTint" to="Reflection_Renderer.motionFadeTint" name="motionFadeTint" />
+        <connect from="MotionBlurParameters.motionBlurDebugOn" to="Reflection_Renderer.motionBlurDebugOn" name="motionBlurDebugOn" />
+        <connect from="DOFParameters.alpha" to="Reflection_Renderer.alpha" name="alpha" />
+        <connect from="DOFParameters.focusDistance" to="Reflection_Renderer.focusDistance" name="focusDistance" />
+        <connect from="DOFParameters.alpha" to="Reflection_Renderer.cocAtInfinity" name="cocAtInfinity" />
+        <connect from="DOFParameters.maxCocScale" to="Reflection_Renderer.maxCocScale" name="maxCocScale" />
+        <connect from="DOFParameters.sampleSpacing1" to="Reflection_Renderer.sampleSpacing1" name="sampleSpacing1" />
+        <connect from="DOFParameters.searchRadius1" to="Reflection_Renderer.searchRadius1" name="searchRadius1" />
+        <connect from="DOFParameters.acceptThreshold" to="Reflection_Renderer.acceptThreshold" name="acceptThreshold" />
+        <connect from="DOFParameters.sampleSpacing2" to="Reflection_Renderer.sampleSpacing2" name="sampleSpacing2" />
+        <connect from="DOFParameters.searchRadius2" to="Reflection_Renderer.searchRadius2" name="searchRadius2" />
+        <connect from="DOFParameters.spreadScale" to="Reflection_Renderer.spreadScale" name="spreadScale" />
+        <connect from="DOFParameters.debugOn" to="Reflection_Renderer.debugOn" name="debugOn" />
+    </connections>
+    <properties>
+        <target  name="finalDesc" ref="SSAOParameters.finalDesc" />
+        <bool  name="mbEnabled" ref="Reflection_Renderer.mbEnabled" />
+        <countedObject  name="opaqueUIList" ref="Reflection_Renderer.opaqueUIList" />
+        <countedObject  name="opaqueUI2DList" ref="Reflection_Renderer.opaqueUI2DList" />
+        <countedObject  name="transparentBitmapsList" ref="Reflection_Renderer.transparentBitmapsList" />
+        <countedObject  name="transparentUIList" ref="Reflection_Renderer.transparentUIList" />
+        <countedObject  name="transparentUI2DList" ref="Reflection_Renderer.transparentUI2DList" />
+        <countedObject  name="xrayUIList" ref="Reflection_Renderer.xrayUIList" />
+        <camera  name="camera" ref="Reflection_Renderer.camera" />
+        <camera  name="camera2D" ref="Reflection_Renderer.camera2D" />
+        <world  name="preOpaqueUIList" ref="Reflection_Renderer.opaqueUIList" />
+        <world  name="preTransparentUIBitmapsList" ref="Reflection_Renderer.transparentBitmapsList" />
+        <world  name="preTransparentUIList" ref="Reflection_Renderer.transparentUIList" />
+        <target  name="final" ref="Reflection_Renderer.input" />
+        <float4  name="viewport" ref="Reflection_Renderer.viewport" />
+        <target  name="maya_DOFEffect_final" ref="Reflection_Renderer.final" />
+        <target  name="maya_MotionBlurEffectV1_final" ref="Reflection_Renderer.final" />
+        <target  name="Maya_SSAO_Beauty_final" ref="Reflection_Renderer.final" />
+        <countedObject  name="transpList" ref="Reflection_Renderer.transpList" />
+        <countedObject  name="unsupportedTranspList" ref="Reflection_Renderer.unsupportedTranspList" />
+        <countedObject  name="opaqueList" ref="Reflection_Renderer.opaqueList" />
+        <int  name="clearDepthFlag" ref="Reflection_Renderer.clearDepthFlag" />
+        <float4  name="clearColor" ref="Reflection_Renderer.clearColor" />
+        <float  name="clearZ" ref="Reflection_Renderer.clearZ" />
+        <int  name="clearStencil" ref="Reflection_Renderer.clearStencil" />
+        <bool  name="disableAlpha" ref="Reflection_Renderer.disableAlpha" />
+        <bool  name="verticalFlip" ref="Reflection_Renderer.verticalFlip" />
+        <bool  name="evaluateAll" ref="Reflection_Renderer.evaluateAll" />
+        <countedObject  name="geometryMaskList" ref="Reflection_Renderer.geometryMaskList" />
+        <bool  name="useZPrePass" ref="Reflection_Renderer.useZPrePass" />
+        <target  name="depth" ref="Reflection_Renderer.depth" />
+        <string  name="drawAgents" ref="Reflection_Renderer.drawAgents" />
+        <string  name="PreUIDrawAgents" ref="Reflection_Renderer.drawAgents" />
+        <bool  name="isPreUI" ref="Reflection_Renderer.isPreUI" />
+        <bool  name="enableLineAA" ref="Reflection_Renderer.enableLineAA" />
+        <bool  name="drawPreUI" ref="Reflection_Renderer.a" />
+        <effectInstance  name="materialOverrideInstance" ref="Reflection_Renderer.materialOverrideInstance" />
+        <bool  name="drawOpaqueList" ref="Reflection_Renderer.drawOpaqueList" />
+        <bool  name="opaqueListsEmpty" ref="Reflection_Renderer.opaqueListsEmpty" />
+        <bool  name="drawPostUI" ref="Reflection_Renderer.drawPostUI" />
+        <bool  name="drawTransparentList" ref="Reflection_Renderer.drawTransparentList" />
+        <bool  name="transpListsEmpty" ref="Reflection_Renderer.transpListsEmpty" />
+        <float4  name="scissorRect" ref="Reflection_Renderer.scissorRect" />
+        <bool  name="backfaceTransparency" ref="Reflection_Renderer.backfaceTransparency" />
+        <bool  name="highPrecisionTarget" ref="Reflection_Renderer.highPrecisionTarget" />
+        <bool  name="listEmpty" ref="Reflection_Renderer.listEmpty" />
+        <target  name="evaluate5" ref="Reflection_Renderer.evaluate5" evaluatedByOwner="true"  />
+        <target  name="evaluate6" ref="Reflection_Renderer.evaluate6" evaluatedByOwner="true"  />
+        <target  name="evaluate7" ref="Reflection_Renderer.evaluate7" evaluatedByOwner="true"  />
+        <target  name="evaluate8" ref="Reflection_Renderer.evaluate8" evaluatedByOwner="true"  />
+        <bool  name="Maya_NDRenderer_Front_FrontFaces" ref="Reflection_Renderer.FrontFaces" />
+        <bool  name="EnableSSAO" ref="Reflection_Renderer.EnableNormalDepth32" />
+        <bool  name="SupportsClipping" ref="Reflection_Renderer.SupportsClipping" />
+        <target  name="backFaceDepth" ref="Reflection_Renderer.backFaceDepth" />
+        <bool  name="BlurDouble" ref="Reflection_Renderer.BlurDouble" />
+        <float3  name="CompositeColor" ref="Reflection_Renderer.CompositeColor" />
+        <world  name="world" ref="Reflection_Renderer.world" />
+        <effectInstance  name="imposterEffect" ref="Reflection_Renderer.imposterEffect" />
+        <simpleMesh  name="imposterMesh" ref="Reflection_Renderer.imposterMesh" />
+        <bool  name="DrawImposterForCell" ref="Reflection_Renderer.DrawImposterForCell" />
+        <bool  name="multiThreaded" ref="Reflection_Renderer.multiThreaded" />
+        <bool  name="occurrencePath" ref="Reflection_Renderer.occurrencePath" />
+        <countedObject  name="nonPostEffectList" ref="Reflection_Renderer.nonPostEffectList" />
+        <countedObject  name="postEffectList" ref="Reflection_Renderer.postEffectList" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearDepthFlag" value="7"  />
+<float4 name="clearColor" value="0.000000,0.000000,0.000000,0.000000"  />
+<float name="clearZ" value="1.000000"  />
+<int name="clearStencil" value="0"  />
+<bool name="disableAlpha" value="false"  />
+<bool name="verticalFlip" value="false"  />
+<bool name="useZPrePass" value="true"  />
+<string name="drawAgents" value="RealizeBoxAgent,SwapAgent,TextureAgent,AttributeFilterAgent,MayaLODAgent,DrawAgent"  />
+<string name="PreUIDrawAgents" value="RealizeBoxAgent,SwapAgent,DrawAgent"  />
+<bool name="isPreUI" value="true"  />
+<bool name="enableLineAA" value="false"  />
+<bool name="drawPreUI" value="true"  />
+<bool name="drawOpaqueList" value="true"  />
+<bool name="opaqueListsEmpty" value="false"  />
+<bool name="drawPostUI" value="true"  />
+<bool name="drawTransparentList" value="true"  />
+<bool name="transpListsEmpty" value="true"  />
+<float4 name="scissorRect" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="backfaceTransparency" value="true"  />
+<bool name="highPrecisionTarget" value="false"  />
+<bool name="listEmpty" value="true"  />
+<bool name="Maya_NDRenderer_Front_FrontFaces" value="true"  />
+<bool name="EnableSSAO" value="true"  />
+<bool name="SupportsClipping" value="false"  />
+<bool name="BlurDouble" value="true"  />
+<float3 name="CompositeColor" value="0.000000,0.000000,0.000000"  />
+<bool name="DrawImposterForCell" value="true"  />
+<bool name="multiThreaded" value="false"  />
+<bool name="occurrencePath" value="true"  />
+    </values>
+    <outputs>
+        <target  name="res" ref="Reflection_Renderer.res" />
+        <string  name="filterName" ref="SSAOParameters.filterName" />
+        <bool  name="enableMB" ref="MotionBlurParameters.enableMB" />
+        <float  name="nearSharpDistance" ref="DOFParameters.nearSharpDistance" />
+        <float  name="farSharpDistance" ref="DOFParameters.farSharpDistance" />
+    </outputs>
+</fragment_graph>

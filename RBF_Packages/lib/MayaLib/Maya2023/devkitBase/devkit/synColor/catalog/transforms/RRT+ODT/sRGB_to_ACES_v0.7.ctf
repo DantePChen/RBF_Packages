@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="f68a1039-1fa1-4486-9dac-744e2555b6e0" version="1.5">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>Inverse ACES Reference Rendering Transform + sRGB Output Device Transform</Description>
+    <Description>aces_dev version 0.7</Description>
+    <InputDescriptor>DCI X'Y'Z', ACES neutrals mapped to the D60 axis</InputDescriptor>
+    <OutputDescriptor>Academy Color Encoding Specification (ACES)</OutputDescriptor>
+    <Gamma inBitDepth="12i" outBitDepth="16f" style="moncurveFwd">
+        <GammaParams gamma="2.400000000000000" offset="0.055000" />
+    </Gamma>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+0.4123907983 0.3575843573 0.1804807931
+0.2126390189 0.7151687145 0.0721923187
+0.0193308182 0.1191947758 0.9505321383
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 1.06349551678  0.00640890980 -0.01580678672
+-0.49207413197  1.36822342873  0.09133709222
+-0.00281646173  0.00464417133  0.91641861200
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 4 3">
+0.9999666213989 0.0000000000000 0.0000000000000 0.0000333344430
+0.0000000000000 0.9999666213989 0.0000000000000 0.0000333344430
+0.0000000000000 0.0000000000000 0.9999666213989 0.0000333344430
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 0.93827980757 -0.00445144530  0.01662752219
+ 0.33736887574  0.72952157259 -0.06689045578
+ 0.00117395073 -0.00371070649  1.09159445763
+        </Array>
+    </Matrix>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/CIE-XYZ_to_ACES_v0.7.ctf" />
+</ProcessList>

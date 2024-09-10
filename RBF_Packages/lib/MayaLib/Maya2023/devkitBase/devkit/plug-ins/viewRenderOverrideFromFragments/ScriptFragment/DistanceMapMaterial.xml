@@ -1,0 +1,36 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="DistanceMapMaterial" name="DistanceMapMaterial" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Planar reflection map generation]]>
+</description>
+    <properties>
+        <float4  name="Plane" />
+        <float2  name="DistanceRange" />
+    </properties>
+    <values>
+<float4 name="Plane" value="0.000000,-1.000000,0.000000,0.000000"  />
+<float2 name="DistanceRange" value="0.000000,5.000000"  />
+    </values>
+    <outputs>
+        <effectInstance  name="material" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <SetEffect name="Distance" path="DistanceMap" technique="" macrolist="" />
+            <SetEffectParameter effect="Distance" name="gPlane" value="@Plane" />
+            <SetEffectParameter effect="Distance" name="gRange" value="@DistanceRange" />
+            <SetParameter name="@material" value="Distance" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

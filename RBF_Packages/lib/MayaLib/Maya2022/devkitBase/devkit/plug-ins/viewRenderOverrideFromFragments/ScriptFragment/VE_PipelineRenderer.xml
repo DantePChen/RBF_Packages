@@ -1,0 +1,31 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment  uiName="VE_PipelineRenderer" name="VE_PipelineRenderer" type="sceneEffect" class="ScriptFragment" version="1.0" feature_level="20" >
+    <description>
+<![CDATA[
+Fragment producing a draw agent based renderer]]>
+</description>
+    <properties>
+        <world  name="world" />
+    </properties>
+    <values>
+    </values>
+    <outputs>
+        <renderer   name="output" />
+    </outputs>
+    <parametershare>
+    </parametershare>
+    <implementation render="OGS" language="ScriptInterpreter" version="0.1" >
+        <scriptCommands>
+            <SetRenderer name="ScriptPipeRenderer" config="OGSMayaNullAgent" />
+            <SetParameter name="@output" value="ScriptPipeRenderer" />
+        </scriptCommands>
+    </implementation>
+</fragment>
+

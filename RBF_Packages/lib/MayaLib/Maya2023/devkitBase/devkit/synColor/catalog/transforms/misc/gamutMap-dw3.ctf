@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="600ee5e7-267d-4c57-843a-ae60f4ca2a82" version="1.4">
+    <Info>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+        <Release>2018.0.80</Release>
+    </Info>
+    <Description>Basic gamut mapping algorithm used in ACES v0.2</Description>
+    <InputDescriptor>generic RGB</InputDescriptor>
+    <OutputDescriptor>generic RGB</OutputDescriptor>
+    <GamutMap inBitDepth="32f" outBitDepth="32f" style="dw3" />
+</ProcessList>

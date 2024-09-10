@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="5571f02a-f634-4538-9117-8b3137f77791" version="1.4">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>Inverse ACES Reference Rendering Transform + SMPTE ref. proj. Output Device Transform</Description>
+    <Description>aces_dev version 0.2</Description>
+    <InputDescriptor>DCI X'Y'Z', ACES neutrals mapped to the D60 axis</InputDescriptor>
+    <OutputDescriptor>Academy Color Encoding Specification (ACES)</OutputDescriptor>
+    <Gamma inBitDepth="12i" outBitDepth="16f" style="basicFwd">
+        <GammaParams gamma="2.600000000000000" />
+    </Gamma>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 4 3">
+1.09103941917419 0.00000000000000 0.00000000000000 0.00000208333338
+0.00000000000000 1.09103941917419 0.00000000000000 0.00000208333338
+0.00000000000000 0.00000000000000 1.09103941917419 0.00000208333338
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+ 0.98722398281 -0.00611322839  0.01595328748
+-0.00759837171  1.00186145306  0.00533003546
+ 0.00307257683 -0.00509596150  1.08168065548
+        </Array>
+    </Matrix>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/CIE-XYZ_to_ACES_v0.2.ctf" />
+</ProcessList>

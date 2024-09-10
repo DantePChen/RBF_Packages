@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="c02647e9-5f8c-433d-ae87-b27f5ce2e352" version="1.4">
+    <Info version="1.0">
+        <Release>2018.0.80</Release>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+    </Info>
+    <Description>Inverse ACES Reference Rendering Transform + P3-DCI Output Device Transform</Description>
+    <Description>aces_dev version 0.2</Description>
+    <InputDescriptor>P3 RGB, ACES neutrals mapped to D60 assuming projector calib. white is DCI</InputDescriptor>
+    <OutputDescriptor>Academy Color Encoding Specification (ACES)</OutputDescriptor>
+    <Gamma inBitDepth="12i" outBitDepth="16f" style="basicFwd">
+        <GammaParams gamma="2.600000000000000" />
+    </Gamma>
+    <Range inBitDepth="16f" outBitDepth="16f">
+        <minInValue>0.0000000000e+00</minInValue>
+        <maxInValue>1.0000000000e+00</maxInValue>
+        <minOutValue>2.0833333334e-06</minOutValue>
+        <maxOutValue>1.0000000000e+00</maxOutValue>
+    </Range>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+0.438201665878 0.269933253527 0.184135630727
+0.206499084830 0.721083581448 0.072568528354
+0.000300256885 0.048078790307 0.981646955013
+        </Array>
+    </Matrix>
+    <Matrix inBitDepth="16f" outBitDepth="16f">
+        <Array dim="3 3 3">
+1.13442993 0.00000000 0.00000000
+0.00000000 1.13442993 0.00000000
+0.00000000 0.00000000 1.13442993
+        </Array>
+    </Matrix>
+    <Reference basePath="Autodesk" inBitDepth="16f" outBitDepth="16f" path="RRT+ODT/CIE-XYZ_to_ACES_v0.2.ctf" />
+</ProcessList>

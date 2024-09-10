@@ -1,0 +1,188 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment_graph  name="GroundReflections" ref="GroundReflections" class="FragmentGraph" version="1.0" feature_level="0" >
+    <description></description>
+    <fragments>
+            <fragment_ref name="ReflectionPass" ref="ReflectionPass" />
+            <fragment_ref name="ReflectionTarget" ref="OffscreenTarget_0_0_0" />
+            <fragment_ref name="DepthTarget" ref="DepthTarget" />
+            <fragment_ref name="VE_GroundPlane" ref="VE_GroundPlane" />
+            <fragment_ref name="VE_PlanarReflection_Render" ref="VE_PlanarReflection_Render" />
+            <fragment_ref name="ClearTargetAndDepth" ref="ClearTargetAndDepth" />
+            <fragment_ref name="VE_ReflectCamera" ref="VE_ReflectCamera" />
+            <fragment_ref name="DepthPassThrough" ref="DepthPassThrough" />
+            <fragment_ref name="DistanceMapRenderer" ref="mayaOpaqueDrawPass" />
+            <fragment_ref name="DistanceMapMaterial" ref="DistanceMapMaterial" />
+            <fragment_ref name="DistanceTarget" ref="DistanceTarget" />
+            <fragment_ref name="default" ref="default" />
+            <fragment_ref name="DepthTarget_0" ref="DepthTarget" />
+            <fragment_ref name="ClearTargetAndDepth_0" ref="ClearTargetAndDepth" />
+    </fragments>
+    <connections>
+        <connect from="VE_ReflectCamera.ReflectedCamera" to="ReflectionPass.camera" name="camera" />
+        <connect from="ClearTargetAndDepth.output" to="ReflectionPass.input" name="final" />
+        <connect from="DepthTarget.output" to="ReflectionPass.depth" name="depth" />
+        <connect from="VE_GroundPlane.GroundPlane" to="VE_PlanarReflection_Render.world" name="world" />
+        <connect from="default.res" to="VE_PlanarReflection_Render.final" name="final" />
+        <connect from="DepthPassThrough.output" to="VE_PlanarReflection_Render.depthstencil" name="depthstencil" />
+        <connect from="ReflectionPass.res" to="VE_PlanarReflection_Render.ReflectionMap" name="ReflectionMap" />
+        <connect from="DistanceMapRenderer.output" to="VE_PlanarReflection_Render.DistanceMap" name="DistanceMap" />
+        <connect from="ReflectionTarget.output" to="ClearTargetAndDepth.final" name="final" />
+        <connect from="DepthTarget.output" to="ClearTargetAndDepth.depthstencil" name="depthstencil" />
+        <connect from="VE_ReflectCamera.ReflectedCamera" to="DistanceMapRenderer.camera" name="camera" />
+        <connect from="ClearTargetAndDepth_0.output" to="DistanceMapRenderer.final" name="final" />
+        <connect from="DepthTarget_0.output" to="DistanceMapRenderer.depth" name="depth" />
+        <connect from="DistanceMapMaterial.material" to="DistanceMapRenderer.materialOverrideInstance" name="materialOverrideInstance" />
+        <connect from="DepthPassThrough.output" to="default.depth" name="depth" />
+        <connect from="DistanceTarget.output" to="ClearTargetAndDepth_0.final" name="final" />
+        <connect from="DepthTarget_0.output" to="ClearTargetAndDepth_0.depthstencil" name="depthstencil" />
+    </connections>
+    <properties>
+        <int  name="GroundPlaneAxis" ref="VE_GroundPlane.GroundPlaneAxis" />
+        <float  name="GroundPlaneOffset" ref="VE_GroundPlane.GroundPlaneOffset" />
+        <bool  name="FlipGroundPlane" ref="VE_GroundPlane.FlipGroundPlane" />
+        <world  name="world" ref="VE_GroundPlane.world" />
+        <bool  name="ShowSurface" ref="VE_GroundPlane.ShowSurface" />
+        <bool  name="ShowWires" ref="VE_GroundPlane.ShowWires" />
+        <int  name="XSegments" ref="VE_GroundPlane.XSegments" />
+        <int  name="YSegments" ref="VE_GroundPlane.YSegments" />
+        <camera  name="camera" ref="VE_PlanarReflection_Render.camera" />
+        <target  name="finalDesc" ref="default.finalDesc" />
+        <countedObject  name="postEffectList" ref="default.postEffectList" />
+        <countedObject  name="opaqueUIList" ref="default.opaqueUIList" />
+        <countedObject  name="opaqueUI2DList" ref="default.opaqueUI2DList" />
+        <countedObject  name="transparentBitmapsList" ref="default.transparentBitmapsList" />
+        <countedObject  name="transparentUIList" ref="default.transparentUIList" />
+        <countedObject  name="transparentUI2DList" ref="default.transparentUI2DList" />
+        <countedObject  name="xrayUIList" ref="default.xrayUIList" />
+        <camera  name="camera2D" ref="default.camera2D" />
+        <world  name="preOpaqueUIList" ref="default.opaqueUIList" />
+        <world  name="preTransparentUIBitmapsList" ref="default.transparentBitmapsList" />
+        <world  name="preTransparentUIList" ref="default.transparentUIList" />
+        <countedObject  name="nonPostEffectList" ref="default.nonPostEffectList" />
+        <target  name="maya_DOFEffect_final" ref="default.final" />
+        <target  name="maya_MotionBlurEffectV1_final" ref="default.final" />
+        <target  name="Maya_SSAO_Beauty_final" ref="default.final" />
+        <float4  name="viewport" ref="default.viewport" />
+        <countedObject  name="transpList" ref="default.transpList" />
+        <countedObject  name="unsupportedTranspList" ref="default.unsupportedTranspList" />
+        <countedObject  name="opaqueList" ref="default.opaqueList" />
+        <countedObject  name="holdOutList" ref="default.holdOutList" />
+        <target  name="final" ref="default.input" />
+        <int  name="clearFlag" ref="default.clearFlag" />
+        <float4  name="clearColor" ref="default.clearColor" />
+        <float  name="clearZ" ref="default.clearZ" />
+        <int  name="clearStencil" ref="default.clearStencil" />
+        <bool  name="disableAlpha" ref="default.disableAlpha" />
+        <bool  name="verticalFlip" ref="default.verticalFlip" />
+        <bool  name="evaluateAll" ref="default.evaluateAll" />
+        <target  name="depth" ref="DepthPassThrough.depth" />
+        <effectInstance  name="materialOverrideInstance" ref="default.materialOverrideInstance" />
+        <bool  name="drawOpaqueList" ref="default.drawOpaqueList" />
+        <bool  name="opaqueListsEmpty" ref="default.opaqueListsEmpty" />
+        <bool  name="enableLineAA" ref="default.enableLineAA" />
+        <bool  name="drawUIList" ref="default.drawUIList" />
+        <bool  name="drawTransparentList" ref="default.drawTransparentList" />
+        <bool  name="transpListsEmpty" ref="default.transpListsEmpty" />
+        <float4  name="scissorRect" ref="default.scissorRect" />
+        <bool  name="backfaceTransparency" ref="default.backfaceTransparency" />
+        <bool  name="highPrecisionTarget" ref="default.highPrecisionTarget" />
+        <bool  name="useZPrePass" ref="default.useZPrePass" />
+        <bool  name="listEmpty" ref="default.listEmpty" />
+        <target  name="evaluate5" ref="default.evaluate5" evaluatedByOwner="true"  />
+        <target  name="evaluate6" ref="default.evaluate6" evaluatedByOwner="true"  />
+        <target  name="evaluate7" ref="default.evaluate7" evaluatedByOwner="true"  />
+        <target  name="evaluate8" ref="default.evaluate8" evaluatedByOwner="true"  />
+        <bool  name="isPreUI" ref="default.isPreUI" />
+        <bool  name="drawPreUI" ref="default.a" />
+        <bool  name="drawPostUI" ref="default.drawPostUI" />
+        <bool  name="Maya_NDRenderer_Front_FrontFaces" ref="default.FrontFaces" />
+        <bool  name="EnableSSAO" ref="default.EnableNormalDepth32" />
+        <bool  name="SupportsClipping" ref="default.SupportsClipping" />
+        <target  name="backFaceDepth" ref="default.backFaceDepth" />
+        <bool  name="BlurDouble" ref="default.BlurDouble" />
+        <float3  name="CompositeColor" ref="default.CompositeColor" />
+        <target  name="previousScript" ref="VE_PlanarReflection_Render.previousScript" />
+        <bool  name="EnableReflection" ref="VE_PlanarReflection_Render.EnableReflection" />
+        <renderer   name="renderer" ref="VE_PlanarReflection_Render.renderer" />
+        <bool  name="mbEnabled" ref="ReflectionPass.mbEnabled" />
+        <float4  name="reflectionPlane" ref="VE_ReflectCamera.reflectionPlane" />
+        <float  name="offscreenClearDepth" ref="ClearTargetAndDepth.clearDepth" />
+        <float4  name="clearRegion" ref="ClearTargetAndDepth.clearRegion" />
+        <int  name="clearDepthFlag" ref="ReflectionPass.clearDepthFlag" />
+        <countedObject  name="geometryMaskList" ref="ReflectionPass.geometryMaskList" />
+        <effectInstance  name="imposterEffect" ref="ReflectionPass.imposterEffect" />
+        <simpleMesh  name="imposterMesh" ref="ReflectionPass.imposterMesh" />
+        <bool  name="DrawImposterForCell" ref="ReflectionPass.DrawImposterForCell" />
+        <bool  name="multiThreaded" ref="ReflectionPass.multiThreaded" />
+        <bool  name="occurrencePath" ref="ReflectionPass.occurrencePath" />
+        <float4  name="Plane" ref="DistanceMapMaterial.Plane" />
+        <float2  name="DistanceRange" ref="DistanceMapMaterial.DistanceRange" />
+        <color  name="Color" ref="VE_PlanarReflection_Render.Color" />
+        <float  name="Saturation" ref="VE_PlanarReflection_Render.Saturation" />
+        <int  name="IntensityType" ref="VE_PlanarReflection_Render.IntensityType" />
+        <float2  name="Intensity" ref="VE_PlanarReflection_Render.Intensity" />
+        <int  name="BlurType" ref="VE_PlanarReflection_Render.BlurType" />
+        <int2  name="BlurAmount" ref="VE_PlanarReflection_Render.BlurAmount" />
+    </properties>
+    <values>
+<int name="GroundPlaneAxis" value="1"  />
+<float name="GroundPlaneOffset" value="-95.500000"  />
+<bool name="FlipGroundPlane" value="false"  />
+<bool name="ShowSurface" value="true"  />
+<bool name="ShowWires" value="false"  />
+<int name="XSegments" value="12"  />
+<int name="YSegments" value="12"  />
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearFlag" value="7"  />
+<float4 name="clearColor" value="0.000000,0.000000,0.000000,0.000000"  />
+<float name="clearZ" value="1.000000"  />
+<int name="clearStencil" value="0"  />
+<bool name="disableAlpha" value="false"  />
+<bool name="verticalFlip" value="false"  />
+<bool name="drawOpaqueList" value="true"  />
+<bool name="opaqueListsEmpty" value="false"  />
+<bool name="enableLineAA" value="false"  />
+<bool name="drawUIList" value="true"  />
+<bool name="drawTransparentList" value="true"  />
+<bool name="transpListsEmpty" value="true"  />
+<float4 name="scissorRect" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="backfaceTransparency" value="true"  />
+<bool name="highPrecisionTarget" value="false"  />
+<bool name="useZPrePass" value="true"  />
+<bool name="listEmpty" value="true"  />
+<bool name="isPreUI" value="true"  />
+<bool name="drawPreUI" value="true"  />
+<bool name="drawPostUI" value="true"  />
+<bool name="Maya_NDRenderer_Front_FrontFaces" value="true"  />
+<bool name="EnableSSAO" value="true"  />
+<bool name="SupportsClipping" value="false"  />
+<bool name="BlurDouble" value="true"  />
+<float3 name="CompositeColor" value="0.000000,0.000000,0.000000"  />
+<bool name="EnableReflection" value="true"  />
+<float4 name="reflectionPlane" value="0.000000,-1.000000,0.000000,0.000000"  />
+<float name="offscreenClearDepth" value="1.000000"  />
+<float4 name="clearRegion" value="0.000000,0.000000,1.000000,1.000000"  />
+<int name="clearDepthFlag" value="7"  />
+<bool name="DrawImposterForCell" value="true"  />
+<bool name="multiThreaded" value="false"  />
+<bool name="occurrencePath" value="true"  />
+<float4 name="Plane" value="0.000000,-1.000000,0.000000,0.000000"  />
+<float2 name="DistanceRange" value="0.000000,5.000000"  />
+<color name="Color" value="0.521569,0.521569,0.521569"  />
+<float name="Saturation" value="0.500000"  />
+<int name="IntensityType" value="3"  />
+<float2 name="Intensity" value="0.800000,0.100000"  />
+<int name="BlurType" value="3"  />
+<int2 name="BlurAmount" value="0,9"  />
+    </values>
+    <outputs>
+        <target  name="output" ref="VE_PlanarReflection_Render.output" />
+    </outputs>
+</fragment_graph>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList id="ed72514c-18be-4127-9608-0278aa4b93c9" name="default look" version="1.3">
+    <Info>
+        <Copyright>Copyright 2017 Autodesk, Inc.  All rights reserved.</Copyright>
+        <Release>2018.0.80</Release>
+    </Info>
+    <Description>Apply the Default Look transform specified in preferences</Description>
+    <InputDescriptor>RGB</InputDescriptor>
+    <OutputDescriptor>RGB</OutputDescriptor>
+    <Reference alias="defaultLook" inBitDepth="12i" outBitDepth="12i">
+        <DynamicParameter param="LOOK_SWITCH" />
+    </Reference>
+</ProcessList>

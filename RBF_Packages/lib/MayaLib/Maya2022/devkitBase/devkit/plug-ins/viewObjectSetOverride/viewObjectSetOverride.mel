@@ -1,0 +1,31 @@
+// ===========================================================================
+// Copyright 2021 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+// Sample usage:
+
+global string $gViewport2;
+file -f -new;
+setRendererInModelPanel $gViewport2 modelPanel4;
+
+$cube = polyCube();
+setAttr ($cube[0] + ".translate") -2 0 0;
+//Create set1
+CreateSet;
+
+$sphere = polySphere();
+setAttr ($sphere[0] + ".translate") 2 0 0;
+//Create set2
+CreateSet;
+
+//switch to override render viewObjectSetOverride
+setRendererAndOverrideInModelPanel $gViewport2 viewObjectSetOverride modelPanel4;
+
+//rename set1 to set3
+rename set1 set3;
+
+//Refresh the viewport, see plugin viewObjectSetOverride codes, set1 is cleared, only sphere be drawn.
+refresh;

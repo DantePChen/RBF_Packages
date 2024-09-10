@@ -1,0 +1,36 @@
+from typing import Any, Container, Dict, Generic, Iterable, Iterator, List, Optional, Set, Tuple, TypeVar, Union
+import sys
+import logging
+import pymel.all as pymel
+
+
+from pymel.core.uitypes import Menu as _Menu
+
+
+if False:
+    from typing import Dict, List, Tuple, Union, Optional
+
+class LoggingMenu(_Menu):
+    def __init__(self, name='None', parent='None'): ...
+    def addHandler(self, logger): ...
+    def buildLevelMenu(self, parent, item): ...
+    def buildSubMenu(self, parent, logger): ...
+    def changeLevel(self, item, level): ...
+    def refresh(self, *args): ...
+    def refreshLoggingMenu(self): ...
+    def setFormatter(self, handler): ...
+    @staticmethod
+    def __new__(cls, name="'pymelLoggingControl'", parent='None'): ...
+
+
+
+
+def refreshLoggerHierarchy(): ...
+def initMenu(): ...
+
+
+n : int
+logLevelNames : list
+logger : logging.Logger
+levelsDict : dict
+

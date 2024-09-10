@@ -1,0 +1,54 @@
+<!--
+Copyright 2016 Autodesk, Inc. All rights reserved. 
+
+Use of this software is subject to the terms of the Autodesk 
+license agreement provided at the time of installation or download, 
+or which otherwise accompanies this software in either electronic 
+or hard copy form.
+-->
+<fragment_graph  name="VE_PlanarReflection_Render" ref="VE_PlanarReflection_Render" class="FragmentGraph" version="1.0" feature_level="20" >
+    <keyword value="SceneDraw" />
+    <fragments>
+            <fragment_ref name="VE_PlanarReflection_RenderFragment" ref="VE_PlanarReflection_RenderFragment" />
+            <fragment_ref name="VE_PipelineRenderer" ref="VE_PipelineRenderer" />
+    </fragments>
+    <connections>
+        <connect from="VE_PipelineRenderer.output" to="VE_PlanarReflection_RenderFragment.defaultRenderer" name="defaultRenderer" />
+    </connections>
+    <properties>
+        <world  name="world" ref="VE_PlanarReflection_RenderFragment.world" />
+        <camera  name="camera" ref="VE_PlanarReflection_RenderFragment.camera" />
+        <target  name="final" ref="VE_PlanarReflection_RenderFragment.final" />
+        <target  name="depthstencil" ref="VE_PlanarReflection_RenderFragment.depthstencil" />
+        <target  name="previousScript" ref="VE_PlanarReflection_RenderFragment.previousScript" />
+        <float4  name="viewport" ref="VE_PlanarReflection_RenderFragment.viewport" />
+        <bool  name="EnableReflection" ref="VE_PlanarReflection_RenderFragment.EnableReflection" />
+        <string  name="VE_PlanarReflection_Render_drawAgents" ref="VE_PipelineRenderer.drawAgents" />
+        <renderer   name="renderer" ref="VE_PlanarReflection_RenderFragment.renderer" />
+        <target  name="ReflectionMap" ref="VE_PlanarReflection_RenderFragment.ReflectionMap" />
+        <target  name="DistanceMap" ref="VE_PlanarReflection_RenderFragment.DistanceMap" />
+        <color  name="Color" ref="VE_PlanarReflection_RenderFragment.Color" />
+        <float  name="Saturation" ref="VE_PlanarReflection_RenderFragment.Saturation" />
+        <int  name="IntensityType" ref="VE_PlanarReflection_RenderFragment.IntensityType" />
+        <float2  name="Intensity" ref="VE_PlanarReflection_RenderFragment.Intensity" />
+        <int  name="BlurType" ref="VE_PlanarReflection_RenderFragment.BlurType" />
+        <int2  name="BlurAmount" ref="VE_PlanarReflection_RenderFragment.BlurAmount" />
+        <bool  name="multiThreaded" ref="VE_PlanarReflection_RenderFragment.multiThreaded" />
+    </properties>
+    <values>
+<float4 name="viewport" value="0.000000,0.000000,1.000000,1.000000"  />
+<bool name="EnableReflection" value="true"  />
+<string name="VE_PlanarReflection_Render_drawAgents" value="RealizeBoxAgent,SwapAgent,DrawAgent"  />
+<color name="Color" value="0.521569,0.521569,0.521569"  />
+<float name="Saturation" value="0.500000"  />
+<int name="IntensityType" value="3"  />
+<float2 name="Intensity" value="0.800000,0.100000"  />
+<int name="BlurType" value="3"  />
+<int2 name="BlurAmount" value="0,9"  />
+<bool name="multiThreaded" value="false"  />
+    </values>
+    <outputs>
+        <target  name="output" ref="VE_PlanarReflection_RenderFragment.output" />
+        <target  name="depthstencil" ref="VE_PlanarReflection_RenderFragment.depthstencil" />
+    </outputs>
+</fragment_graph>
